@@ -9,8 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as IndustriesRouteImport } from './routes/industries'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BusinessEnginesRouteImport } from './routes/business-engines'
+import { Route as AiProductsRouteImport } from './routes/ai-products'
+import { Route as AiAssessmentRouteImport } from './routes/ai-assessment'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesRoute = IndustriesRouteImport.update({
+  id: '/industries',
+  path: '/industries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessEnginesRoute = BusinessEnginesRouteImport.update({
+  id: '/business-engines',
+  path: '/business-engines',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiProductsRoute = AiProductsRouteImport.update({
+  id: '/ai-products',
+  path: '/ai-products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiAssessmentRoute = AiAssessmentRouteImport.update({
+  id: '/ai-assessment',
+  path: '/ai-assessment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +61,130 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-assessment': typeof AiAssessmentRoute
+  '/ai-products': typeof AiProductsRoute
+  '/business-engines': typeof BusinessEnginesRoute
+  '/contact': typeof ContactRoute
+  '/industries': typeof IndustriesRoute
+  '/insights': typeof InsightsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-assessment': typeof AiAssessmentRoute
+  '/ai-products': typeof AiProductsRoute
+  '/business-engines': typeof BusinessEnginesRoute
+  '/contact': typeof ContactRoute
+  '/industries': typeof IndustriesRoute
+  '/insights': typeof InsightsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-assessment': typeof AiAssessmentRoute
+  '/ai-products': typeof AiProductsRoute
+  '/business-engines': typeof BusinessEnginesRoute
+  '/contact': typeof ContactRoute
+  '/industries': typeof IndustriesRoute
+  '/insights': typeof InsightsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/ai-assessment'
+    | '/ai-products'
+    | '/business-engines'
+    | '/contact'
+    | '/industries'
+    | '/insights'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/ai-assessment'
+    | '/ai-products'
+    | '/business-engines'
+    | '/contact'
+    | '/industries'
+    | '/insights'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/ai-assessment'
+    | '/ai-products'
+    | '/business-engines'
+    | '/contact'
+    | '/industries'
+    | '/insights'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AiAssessmentRoute: typeof AiAssessmentRoute
+  AiProductsRoute: typeof AiProductsRoute
+  BusinessEnginesRoute: typeof BusinessEnginesRoute
+  ContactRoute: typeof ContactRoute
+  IndustriesRoute: typeof IndustriesRoute
+  InsightsRoute: typeof InsightsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries': {
+      id: '/industries'
+      path: '/industries'
+      fullPath: '/industries'
+      preLoaderRoute: typeof IndustriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business-engines': {
+      id: '/business-engines'
+      path: '/business-engines'
+      fullPath: '/business-engines'
+      preLoaderRoute: typeof BusinessEnginesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-products': {
+      id: '/ai-products'
+      path: '/ai-products'
+      fullPath: '/ai-products'
+      preLoaderRoute: typeof AiProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-assessment': {
+      id: '/ai-assessment'
+      path: '/ai-assessment'
+      fullPath: '/ai-assessment'
+      preLoaderRoute: typeof AiAssessmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +197,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AiAssessmentRoute: AiAssessmentRoute,
+  AiProductsRoute: AiProductsRoute,
+  BusinessEnginesRoute: BusinessEnginesRoute,
+  ContactRoute: ContactRoute,
+  IndustriesRoute: IndustriesRoute,
+  InsightsRoute: InsightsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
