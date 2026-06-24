@@ -98,17 +98,8 @@ export function LeadDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
-        showCloseButton={false}
         className="!max-w-2xl glass-strong border-white/10 shadow-glow p-0 overflow-hidden bg-popover/80"
       >
-        <button
-          onClick={() => handleOpenChange(false)}
-          aria-label="Close"
-          className="absolute right-4 top-4 z-10 grid h-8 w-8 place-items-center rounded-full glass hover:bg-white/10"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
         <div className="relative">
           <div className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-magenta/30 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-electric/20 blur-3xl" />
