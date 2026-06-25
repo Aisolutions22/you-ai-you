@@ -10,10 +10,10 @@ type WindowWithDataLayer = Window & { dataLayer?: Array<Record<string, unknown>>
 export function trackCta(event: string, detail?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
   try {
-    const data = { event, ...detail, ts: Date.now() };
+    const data = { ...detail, event, ts: Date.now() };
     window.dispatchEvent(new CustomEvent("yai:cta_click", { detail: data }));
     const w = window as WindowWithDataLayer;
-    if (Array.isArray(w.dataLayer)) w.dataLayer.push({ event: "cta_click", ...data });
+    if (Array.isArray(w.dataLayer)) w.dataLayer.push({ ...data, event: "cta_click" });
   } catch {
     /* analytics is best-effort */
   }
