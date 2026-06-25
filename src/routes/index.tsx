@@ -215,6 +215,8 @@ function Hero() {
               alt="AI-powered transformation"
               width={1024}
               height={1536}
+              fetchPriority="high"
+              decoding="async"
               className="relative h-full w-full object-contain object-center drop-shadow-[0_30px_80px_rgba(220,40,180,0.25)] ltr:-scale-x-100"
             />
           </motion.div>
