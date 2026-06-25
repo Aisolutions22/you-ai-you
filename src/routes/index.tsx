@@ -85,7 +85,18 @@ function Hero() {
       <div className="absolute inset-0 grid-bg opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]" />
       <motion.div style={{ y: y1 }} className="pointer-events-none absolute -top-40 -start-40 h-[620px] w-[620px] rounded-full bg-magenta/45 blur-[160px] animate-orb" />
       <motion.div style={{ y: y2 }} className="pointer-events-none absolute top-20 end-[-180px] h-[520px] w-[520px] rounded-full bg-electric/35 blur-[160px] animate-orb" />
-      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-ember/20 blur-[180px]" />
+        <div className="pointer-events-none absolute bottom-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-ember/20 blur-[180px]" />
+
+      {/* Mobile-only atmospheric AI portrait background */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 lg:hidden">
+        <img
+          src={heroPortrait}
+          alt=""
+          aria-hidden
+          className="absolute left-1/2 top-1/2 h-[110%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain object-center opacity-20 blur-[6px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_75%)]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/80" />
+      </div>
 
       <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8">
         {/* Content + portrait grid */}
