@@ -44,7 +44,12 @@ export function openWhatsApp(payload: WAPayload): WhatsAppOpenResult | undefined
   exposeWhatsAppDebug(result);
 
   if (result.target === "mobile") {
-    window.location.assign(result.url);
+    const opened = window.open(result.url, "_blank", "noopener,noreferrer");
+    if (opened) {
+      opened.opener = null;
+    } else {
+      window.location.assign(result.url);
+    }
     return result;
   }
 
@@ -102,9 +107,17 @@ function verifyPayloadInMessage(payload: WAPayload, message: string) {
   const missingLabels = payload.fields
     .map((field) => `${field.label}:`)
     .filter((label) => !message.includes(label));
+  const missingValues = payload.fields
+    .map((field) => String(field.value ?? "").trim())
+    .filter((value) => value.length > 0 && !message.includes(value));
 
-  if (missingLabels.length > 0) {
-    throw new Error(`WhatsApp message verification failed. Missing fields: ${missingLabels.join(", ")}`);
+  if (missingLabels.length > 0 || missingValues.length > 0) {
+    throw new Error(
+      `WhatsApp message verification failed. Missing fields: ${[
+        ...missingLabels,
+        ...missingValues,
+      ].join(", ")}`,
+    );
   }
 }
 
