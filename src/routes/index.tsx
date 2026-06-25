@@ -655,11 +655,37 @@ function Assessment() {
                 ))}
               </div>
             </div>
-            <LeadDialog variant="strategy">
-              <button type="button" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full glass-strong px-6 py-3 text-sm font-medium hover:bg-white/10">
-                <Calendar className="h-4 w-4" /> {t.common.bookSession}
-              </button>
-            </LeadDialog>
+            <WhatsAppCTA
+              eventName="cta_assessment_whatsapp"
+              title={t.whatsapp.assessmentTitle}
+              description={t.whatsapp.assessmentDescription}
+              payload={(): WAPayload => ({
+                type: "assessment",
+                fields: [
+                  { label: t.whatsapp.fields.type, value: t.whatsapp.types.assessment },
+                  { label: t.whatsapp.fields.company, value: "—" },
+                  { label: t.whatsapp.fields.industry, value: sector },
+                  { label: t.whatsapp.fields.size, value: size },
+                  { label: t.whatsapp.fields.employees, value: String(employees) },
+                  { label: t.whatsapp.fields.challenge, value: challenges.join(", ") || "—" },
+                  { label: t.whatsapp.fields.readiness, value: `${scores.readiness}/100` },
+                  { label: t.whatsapp.fields.growth, value: `${scores.growth}/100` },
+                  { label: t.whatsapp.fields.automation, value: `${scores.automation}/100` },
+                  { label: t.whatsapp.fields.savings, value: `$${scores.savings.toLocaleString()}` },
+                  { label: t.whatsapp.fields.recommended, value: [t.assessment.engineRec.ops, cxRec, t.assessment.engineRec.content].join(", ") },
+                ],
+              })}
+            >
+              {(openCTA) => (
+                <button
+                  type="button"
+                  onClick={openCTA}
+                  className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow"
+                >
+                  <Calendar className="h-4 w-4" /> {t.cta.bookExecutive}
+                </button>
+              )}
+            </WhatsAppCTA>
           </div>
         </div>
       </div>
