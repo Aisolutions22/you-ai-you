@@ -4,16 +4,18 @@ import { useMemo, useRef, useState } from "react";
 import {
   ArrowRight, Sparkles, TrendingUp, Cog, Heart, FileText, Lightbulb,
   Scale, Building2, Home, ShoppingBag, Stethoscope, PhoneCall, Users, PenTool, Store,
-  Brain, Target, Zap, DollarSign, ChevronRight, CheckCircle2, Calendar,
+  Brain, Target, Zap, DollarSign, ChevronRight, ChevronLeft, CheckCircle2, Calendar,
   FileSearch, BarChart3, Layers, Workflow, Plug, Maximize, Gauge,
-  ShieldCheck, Globe2, Database, Rocket,
+  ShieldCheck, Globe2, Database, Rocket, X, AlertTriangle,
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { Section, SectionHeading, SectionEyebrow } from "@/components/site/Section";
 import { LeadDialog } from "@/components/site/LeadDialog";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useT, useI18n } from "@/lib/i18n";
+import heroPortrait from "@/assets/hero-ai-portrait.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
