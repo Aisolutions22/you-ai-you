@@ -39,13 +39,13 @@ export function Navbar() {
             <span className="font-display text-2xl leading-none">You<span className="text-gradient">AI</span></span>
           </Link>
 
-          <ul className="hidden items-center gap-1 xl:flex">
+          <ul className="hidden items-center gap-1 lg:flex lg:gap-2 xl:gap-3">
             {NAV.map((item) => (
               <li key={item.to}>
                 <Link
                   to={item.to}
-                  className="rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
-                  activeProps={{ className: "rounded-full px-3 py-1.5 text-sm text-foreground bg-white/5" }}
+                  className="whitespace-nowrap rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
+                  activeProps={{ className: "whitespace-nowrap rounded-full px-3 py-1.5 text-sm text-foreground bg-white/5" }}
                   activeOptions={{ exact: !!item.exact }}
                 >
                   {item.label}
@@ -53,6 +53,7 @@ export function Navbar() {
               </li>
             ))}
           </ul>
+
 
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
