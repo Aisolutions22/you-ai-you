@@ -129,7 +129,7 @@ function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display mt-4 text-center text-[30px] leading-[1.05] tracking-tight text-balance sm:text-[40px] lg:text-start lg:text-[52px]"
+              className="font-display mt-3 text-center text-[28px] leading-[1.05] tracking-tight text-balance sm:text-[36px] lg:text-start lg:text-[48px]"
             >
               {t.hero.headlineEn1}{" "}
               <span className="text-gradient">{t.hero.headlineEnHi}</span>{" "}
@@ -141,7 +141,7 @@ function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.2 }}
-              className="mx-auto mt-4 max-w-xl text-center text-sm text-muted-foreground sm:text-base lg:mx-0 lg:text-start"
+              className="mx-auto mt-3 max-w-xl text-center text-sm text-muted-foreground sm:text-base lg:mx-0 lg:text-start"
             >
               {t.hero.sub}
             </motion.p>
@@ -151,8 +151,9 @@ function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.3 }}
-              className="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+              className="mt-4 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
             >
+
               <LeadDialog variant="roadmap">
                 <button type="button" className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
                   {t.hero.cta1}
