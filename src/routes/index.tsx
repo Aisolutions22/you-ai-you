@@ -17,7 +17,8 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useT, useI18n } from "@/lib/i18n";
-import heroPortrait from "@/assets/hero-ai-portrait.png";
+import heroPortrait from "@/assets/hero-ai-portrait.webp";
+import heroPortraitSm from "@/assets/hero-ai-portrait-sm.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,7 +29,11 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "From automation and digital transformation to AI-powered growth, sales and customer service systems." },
       { property: "og:url", content: "/" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [
+      { rel: "canonical", href: "/" },
+      { rel: "preload", as: "image", href: heroPortraitSm, fetchpriority: "high", media: "(max-width: 1023px)" },
+      { rel: "preload", as: "image", href: heroPortrait, fetchpriority: "high", media: "(min-width: 1024px)" },
+    ],
   }),
   component: HomePage,
 });
@@ -81,32 +86,37 @@ function Hero() {
 
   return (
     <section ref={ref} className="relative isolate overflow-hidden">
-      {/* Atmosphere */}
+      {/* Atmosphere — heavy blur/animation hidden on mobile for perf */}
       <div className="absolute inset-0 grid-bg opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]" />
-      <motion.div style={{ y: y1 }} className="pointer-events-none absolute -top-40 -start-40 h-[620px] w-[620px] rounded-full bg-magenta/45 blur-[160px] animate-orb" />
-      <motion.div style={{ y: y2 }} className="pointer-events-none absolute top-20 end-[-180px] h-[520px] w-[520px] rounded-full bg-electric/35 blur-[160px] animate-orb" />
-        <div className="pointer-events-none absolute bottom-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-ember/20 blur-[180px]" />
+      <motion.div style={{ y: y1 }} className="pointer-events-none absolute -top-40 -start-40 hidden h-[620px] w-[620px] rounded-full bg-magenta/45 blur-[160px] animate-orb sm:block" />
+      <motion.div style={{ y: y2 }} className="pointer-events-none absolute top-20 end-[-180px] hidden h-[520px] w-[520px] rounded-full bg-electric/35 blur-[160px] animate-orb sm:block" />
+      <div className="pointer-events-none absolute bottom-0 left-1/2 hidden h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-ember/20 blur-[180px] sm:block" />
 
-      {/* Desktop depth: heavily blurred silhouette behind the content for premium layering */}
+      {/* Desktop depth: heavily blurred silhouette behind the content */}
       <div aria-hidden className="pointer-events-none absolute inset-0 hidden lg:block">
         <img
           src={heroPortrait}
           alt=""
           aria-hidden
+          loading="lazy"
+          decoding="async"
           className="absolute left-[42%] top-1/2 h-[120%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.12] blur-[26px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
         />
       </div>
 
-      {/* Mobile-only atmospheric AI portrait background */}
+      {/* Mobile-only atmospheric AI portrait background — lighter blur, smaller asset */}
       <div aria-hidden className="pointer-events-none absolute inset-0 lg:hidden">
         <img
-          src={heroPortrait}
+          src={heroPortraitSm}
           alt=""
           aria-hidden
-          className="absolute left-1/2 top-1/2 h-[110%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain object-center opacity-20 blur-[6px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_75%)]"
+          fetchPriority="high"
+          decoding="async"
+          className="absolute left-1/2 top-1/2 h-[110%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain object-center opacity-[0.18] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_75%)]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/80" />
       </div>
+
 
       <div className="relative mx-auto max-w-7xl px-6 pt-2 pb-6 sm:pt-4 sm:pb-10 lg:pt-6">
         {/* Content + portrait grid */}
@@ -205,6 +215,8 @@ function Hero() {
               alt="AI-powered transformation"
               width={1024}
               height={1536}
+              fetchPriority="high"
+              decoding="async"
               className="relative h-full w-full object-contain object-center drop-shadow-[0_30px_80px_rgba(220,40,180,0.25)] ltr:-scale-x-100"
             />
           </motion.div>
