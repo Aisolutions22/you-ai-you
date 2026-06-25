@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { Section, SectionHeading } from "@/components/site/Section";
+import { LeadDialog } from "@/components/site/LeadDialog";
 import { useMemo, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -91,9 +92,11 @@ function AssessmentPage() {
                 </div>
                 <div className="font-display mt-1 text-4xl text-gradient">${scores.savings.toLocaleString()}</div>
               </div>
-              <Link to="/contact" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow">
-                <Calendar className="h-4 w-4" /> Book Strategy Session <ArrowRight className="h-4 w-4" />
-              </Link>
+              <LeadDialog variant="strategy">
+                <button type="button" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow">
+                  <Calendar className="h-4 w-4" /> Book Strategy Session <ArrowRight className="h-4 w-4" />
+                </button>
+              </LeadDialog>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { Section, SectionHeading } from "@/components/site/Section";
+import { LeadDialog } from "@/components/site/LeadDialog";
 import { Rocket, Globe2, ShieldCheck, Brain, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
@@ -66,9 +67,11 @@ function AboutPage() {
             <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
               90-minute working session with our senior partners. Walk out with a transformation roadmap tailored to your business.
             </p>
-            <Link to="/contact" className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow">
-              Book Executive Strategy Session <ArrowRight className="h-4 w-4" />
-            </Link>
+            <LeadDialog variant="strategy">
+              <button type="button" className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow">
+                Book Executive Strategy Session <ArrowRight className="h-4 w-4" />
+              </button>
+            </LeadDialog>
           </div>
         </div>
       </Section>
