@@ -36,10 +36,10 @@ const en: Dictionary = {
   hero: {
     eyebrow: "Enterprise AI Transformation · KSA · GCC · Global",
     headlineAr: "نبني شركات تعمل بالذكاء الاصطناعي",
-    headlineEn1: "Building",
-    headlineEnHi: "AI-Powered",
-    headlineEn2: "Businesses.",
-    sub: "From automation and digital transformation to AI-powered growth, sales and customer experience systems — engineered for the Vision 2030 era.",
+    headlineEn1: "Grow Revenue.",
+    headlineEnHi: "Cut Costs.",
+    headlineEn2: "Outpace Competition.",
+    sub: "We architect AI-powered operating systems that compound growth, eliminate manual cost, and turn every department into a competitive advantage — engineered for the Vision 2030 era.",
     cta1: "Get Your AI Growth Roadmap",
     cta2: "Explore Solutions",
     trust: [
@@ -48,6 +48,12 @@ const en: Dictionary = {
       { k: "12wk", v: "First systems live" },
       { k: "9 sectors", v: "Production deployments" },
     ],
+    outcomeBadges: ["Revenue Growth", "Cost Reduction", "Operational Speed"],
+    industryStripTitle: "Built for your industry",
+    industryStripSub: "Hover to reveal the bottleneck. Tap to open the solution blueprint.",
+    tapHint: "View solution",
+    panelClose: "Close",
+    panelCtaPrimary: "Model this for my company",
   },
   journey: {
     eyebrow: "The Transformation Journey",
