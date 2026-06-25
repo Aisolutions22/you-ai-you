@@ -29,8 +29,7 @@ export function openWhatsApp(payload?: WAPayload) {
   if (payload) {
     const text = formatWhatsAppMessage(payload);
     if (text) {
-      const params = new URLSearchParams({ text, autoload: "1", app_absent: "0" });
-      url = `${WA_MESSAGE_URL}?${params.toString()}`;
+      url = `${WA_MESSAGE_URL}?text=${encodeURIComponent(text)}&autoload=1&app_absent=0`;
     }
   }
   const w = window.open(url, "_blank", "noopener,noreferrer");
