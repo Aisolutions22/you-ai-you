@@ -23,7 +23,7 @@ type Variant = "roadmap" | "strategy";
 type SizeOpt = "1–10" | "11–50" | "51–200" | "201–1000" | "1000+";
 type LeadForm = {
   name: string; email: string; company: string; role?: string;
-  phone?: string; size: SizeOpt; industry: string; message?: string;
+  phone?: string; size: SizeOpt; industry: string; challenges: string[]; goals?: string; notes?: string; message?: string;
 };
 
 const SIZES: readonly SizeOpt[] = ["1–10", "11–50", "51–200", "201–1000", "1000+"] as const;
@@ -44,31 +44,44 @@ export function LeadDialog({ variant = "roadmap", children }: { variant?: Varian
     phone: z.string().trim().max(40).optional().or(z.literal("")),
     size: z.enum([...SIZES] as [SizeOpt, ...SizeOpt[]], { message: t.lead.errors.size }),
     industry: z.string().trim().min(2, t.lead.errors.industry).max(80),
+    challenges: z.array(z.string()).default([]),
+    goals: z.string().trim().max(1000).optional().or(z.literal("")),
+    notes: z.string().trim().max(1000).optional().or(z.literal("")),
     message: z.string().trim().max(1000).optional().or(z.literal("")),
   }), [t]);
 
   const form = useForm<LeadForm>({
     resolver: zodResolver(schema) as any,
-    defaultValues: { name: "", email: "", company: "", role: "", phone: "", size: "51–200", industry: "", message: "" },
+    defaultValues: { name: "", email: "", company: "", role: "", phone: "", size: "51–200", industry: "", challenges: [], goals: "", notes: "", message: "" },
     mode: "onBlur",
   });
   const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting }, reset } = form;
   const size = watch("size");
+  const challenges = watch("challenges") ?? [];
+
+  const toggleChallenge = (challenge: string) => {
+    const next = challenges.includes(challenge)
+      ? challenges.filter((item) => item !== challenge)
+      : [...challenges, challenge];
+    setValue("challenges", next, { shouldDirty: true, shouldValidate: true });
+  };
 
   const onSubmit = async (values: LeadForm) => {
     const f = t.whatsapp.fields;
     const p: WAPayload = {
       type: variant,
       fields: [
+        { label: "Name", value: values.name },
+        { label: "Company", value: values.company },
+        { label: "Email", value: values.email },
+        { label: "Phone", value: values.phone ?? "" },
+        { label: "Industry", value: values.industry },
+        { label: "Company Size", value: values.size },
+        { label: "Challenges", value: values.challenges.join(", ") },
+        { label: "Goals", value: values.goals ?? "" },
+        { label: "Notes", value: values.notes || values.message || "" },
         { label: f.type, value: t.whatsapp.types[variant] },
-        { label: f.name, value: values.name },
-        { label: f.email, value: values.email },
-        { label: f.company, value: values.company },
         { label: f.role, value: values.role ?? "" },
-        { label: f.phone, value: values.phone ?? "" },
-        { label: f.industry, value: values.industry },
-        { label: f.size, value: values.size },
-        { label: f.message, value: values.message ?? "" },
       ],
     };
     trackCta(`lead_submit_${variant}`, { type: variant });
@@ -171,8 +184,30 @@ export function LeadDialog({ variant = "roadmap", children }: { variant?: Varian
               </div>
 
               <div className="sm:col-span-2">
-                <Field label={meta.messageLabel} error={errors.message?.message}>
-                  <Textarea rows={4} maxLength={1000} placeholder={t.lead.placeholders.message} {...register("message")} />
+                <Label className="text-xs uppercase tracking-widest text-muted-foreground">{t.lead.fields.challenges}</Label>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {t.lead.challengeOptions.map((challenge) => (
+                    <button
+                      key={challenge}
+                      type="button"
+                      onClick={() => toggleChallenge(challenge)}
+                      className={`rounded-full px-3 py-1.5 text-xs transition-colors ${challenges.includes(challenge) ? "bg-brand text-primary-foreground shadow-glow" : "glass hover:bg-white/10"}`}
+                    >
+                      {challenge}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <Field label={t.lead.fields.goals} error={errors.goals?.message}>
+                  <Textarea rows={3} maxLength={1000} placeholder={t.lead.placeholders.goals} {...register("goals")} />
+                </Field>
+              </div>
+
+              <div className="sm:col-span-2">
+                <Field label={t.lead.fields.notes} error={errors.notes?.message}>
+                  <Textarea rows={3} maxLength={1000} placeholder={t.lead.placeholders.notes} {...register("notes")} />
                 </Field>
               </div>
 
