@@ -73,7 +73,8 @@ export function Navbar() {
         </nav>
 
         {open && (
-          <div className="xl:hidden mt-2 glass-strong rounded-2xl p-3">
+          <div className="lg:hidden mt-2 glass-strong rounded-2xl p-3">
+
             <ul className="grid gap-1">
               {NAV.map((item) => (
                 <li key={item.to}>
