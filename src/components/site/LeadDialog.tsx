@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,90 +16,62 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-
-const leadSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your full name").max(100),
-  email: z.string().trim().email("Enter a valid work email").max(255),
-  company: z.string().trim().min(2, "Company is required").max(120),
-  role: z.string().trim().max(80).optional().or(z.literal("")),
-  phone: z.string().trim().max(40).optional().or(z.literal("")),
-  size: z.enum(["1–10", "11–50", "51–200", "201–1000", "1000+"], {
-    message: "Select company size",
-  }),
-  industry: z.string().trim().min(2, "Industry is required").max(80),
-  message: z.string().trim().max(1000).optional().or(z.literal("")),
-});
-
-type LeadForm = z.infer<typeof leadSchema>;
+import { useT } from "@/lib/i18n";
 
 type Variant = "roadmap" | "strategy";
-
-const VARIANTS: Record<Variant, { eyebrow: string; title: string; sub: string; cta: string; success: string; icon: React.ComponentType<{ className?: string }> }> = {
-  roadmap: {
-    eyebrow: "AI Growth Roadmap",
-    title: "Get your AI Growth Roadmap",
-    sub: "Tell us about your business. Within one business day, a senior partner will deliver a tailored roadmap with prioritized initiatives and projected ROI.",
-    cta: "Send my roadmap request",
-    success: "Roadmap request received.",
-    icon: Sparkles,
-  },
-  strategy: {
-    eyebrow: "Executive Strategy Session",
-    title: "Book your Executive Strategy Session",
-    sub: "A 90-minute working session with our senior partners. Walk out with a transformation roadmap, an opportunity map and a phased ROI plan — tailored to your business.",
-    cta: "Request strategy session",
-    success: "Strategy session request received.",
-    icon: Calendar,
-  },
+type SizeOpt = "1–10" | "11–50" | "51–200" | "201–1000" | "1000+";
+type LeadForm = {
+  name: string; email: string; company: string; role?: string;
+  phone?: string; size: SizeOpt; industry: string; message?: string;
 };
 
-const SIZES = ["1–10", "11–50", "51–200", "201–1000", "1000+"] as const;
+const SIZES: readonly SizeOpt[] = ["1–10", "11–50", "51–200", "201–1000", "1000+"] as const;
 
-export function LeadDialog({
-  variant = "roadmap",
-  children,
-}: {
-  variant?: Variant;
-  children: React.ReactNode;
-}) {
+export function LeadDialog({ variant = "roadmap", children }: { variant?: Variant; children: React.ReactNode }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
-  const meta = VARIANTS[variant];
-  const Icon = meta.icon;
+
+  const meta = t.lead[variant];
+  const Icon = variant === "strategy" ? Calendar : Sparkles;
+
+  // Build localized schema each render so error messages follow language.
+  const schema = useMemo(() => z.object({
+    name: z.string().trim().min(2, t.lead.errors.name).max(100),
+    email: z.string().trim().email(t.lead.errors.email).max(255),
+    company: z.string().trim().min(2, t.lead.errors.company).max(120),
+    role: z.string().trim().max(80).optional().or(z.literal("")),
+    phone: z.string().trim().max(40).optional().or(z.literal("")),
+    size: z.enum([...SIZES] as [SizeOpt, ...SizeOpt[]], { message: t.lead.errors.size }),
+    industry: z.string().trim().min(2, t.lead.errors.industry).max(80),
+    message: z.string().trim().max(1000).optional().or(z.literal("")),
+  }), [t]);
 
   const form = useForm<LeadForm>({
-    resolver: zodResolver(leadSchema),
-    defaultValues: {
-      name: "", email: "", company: "", role: "", phone: "",
-      size: "51–200", industry: "", message: "",
-    },
+    resolver: zodResolver(schema) as any,
+    defaultValues: { name: "", email: "", company: "", role: "", phone: "", size: "51–200", industry: "", message: "" },
     mode: "onBlur",
   });
   const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting }, reset } = form;
   const size = watch("size");
 
-  const onSubmit = async (values: LeadForm) => {
-    // Simulated submission. Replace with backend integration when wired up.
+  const onSubmit = async (_values: LeadForm) => {
     await new Promise((r) => setTimeout(r, 700));
-    // Avoid logging PII in production.
     setDone(true);
-    toast.success(meta.success, { description: "We'll be in touch within one business day." });
+    toast.success(meta.success, { description: t.lead.successDescription });
   };
 
   const handleOpenChange = (v: boolean) => {
     setOpen(v);
-    if (!v) {
-      // Reset on close so reopening starts fresh
-      setTimeout(() => { setDone(false); reset(); }, 250);
-    }
+    if (!v) setTimeout(() => { setDone(false); reset(); }, 250);
   };
+
+  const stepsList = variant === "strategy" ? t.lead.steps.strategy : t.lead.steps.roadmap;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent
-        className="!max-w-2xl glass-strong border-white/10 shadow-glow p-0 overflow-hidden bg-popover/80"
-      >
+      <DialogContent className="!max-w-2xl glass-strong border-white/10 shadow-glow p-0 overflow-hidden bg-popover/80">
         <div className="relative">
           <div className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-magenta/30 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-electric/20 blur-3xl" />
@@ -126,27 +98,27 @@ export function LeadDialog({
                 <DialogDescription className="mt-3 text-sm text-muted-foreground">{meta.sub}</DialogDescription>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="mt-6 grid gap-4 sm:grid-cols-2" noValidate>
-                  <Field label="Full name" error={errors.name?.message}>
-                    <Input maxLength={100} placeholder="Your name" {...register("name")} />
+                  <Field label={t.lead.fields.name} error={errors.name?.message}>
+                    <Input maxLength={100} placeholder={t.lead.placeholders.name} {...register("name")} />
                   </Field>
-                  <Field label="Work email" error={errors.email?.message}>
-                    <Input type="email" maxLength={255} placeholder="you@company.com" {...register("email")} />
+                  <Field label={t.lead.fields.email} error={errors.email?.message}>
+                    <Input type="email" maxLength={255} placeholder={t.lead.placeholders.email} {...register("email")} />
                   </Field>
-                  <Field label="Company" error={errors.company?.message}>
-                    <Input maxLength={120} placeholder="Company" {...register("company")} />
+                  <Field label={t.lead.fields.company} error={errors.company?.message}>
+                    <Input maxLength={120} placeholder={t.lead.placeholders.company} {...register("company")} />
                   </Field>
-                  <Field label="Role" error={errors.role?.message}>
-                    <Input maxLength={80} placeholder="CEO, COO, Head of…" {...register("role")} />
+                  <Field label={t.lead.fields.role} error={errors.role?.message}>
+                    <Input maxLength={80} placeholder={t.lead.placeholders.role} {...register("role")} />
                   </Field>
-                  <Field label="Industry" error={errors.industry?.message}>
-                    <Input maxLength={80} placeholder="e.g. Legal, Construction" {...register("industry")} />
+                  <Field label={t.lead.fields.industry} error={errors.industry?.message}>
+                    <Input maxLength={80} placeholder={t.lead.placeholders.industry} {...register("industry")} />
                   </Field>
-                  <Field label="Phone" error={errors.phone?.message}>
-                    <Input maxLength={40} placeholder="+966…" {...register("phone")} />
+                  <Field label={t.lead.fields.phone} error={errors.phone?.message}>
+                    <Input maxLength={40} placeholder={t.lead.placeholders.phone} {...register("phone")} />
                   </Field>
 
                   <div className="sm:col-span-2">
-                    <Label className="text-xs uppercase tracking-widest text-muted-foreground">Company size</Label>
+                    <Label className="text-xs uppercase tracking-widest text-muted-foreground">{t.lead.fields.size}</Label>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {SIZES.map((s) => (
                         <button
@@ -163,22 +135,20 @@ export function LeadDialog({
                   </div>
 
                   <div className="sm:col-span-2">
-                    <Field label={variant === "strategy" ? "What do you want to transform?" : "Top business challenge"} error={errors.message?.message}>
-                      <Textarea rows={4} maxLength={1000} placeholder="A few sentences help us tailor your roadmap." {...register("message")} />
+                    <Field label={meta.messageLabel} error={errors.message?.message}>
+                      <Textarea rows={4} maxLength={1000} placeholder={t.lead.placeholders.message} {...register("message")} />
                     </Field>
                   </div>
 
                   <div className="sm:col-span-2 mt-1 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-[11px] text-muted-foreground">
-                      By submitting, you agree to be contacted by You AI. We never share your details.
-                    </p>
+                    <p className="text-[11px] text-muted-foreground">{t.lead.consent}</p>
                     <button
                       type="submit"
                       disabled={isSubmitting}
                       className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02] disabled:opacity-70"
                     >
-                      {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-                      {isSubmitting ? "Sending…" : meta.cta}
+                      {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4 rtl:rotate-180" />}
+                      {isSubmitting ? t.lead.sending : meta.cta}
                     </button>
                   </div>
                 </form>
@@ -195,18 +165,12 @@ export function LeadDialog({
                 <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-brand shadow-glow">
                   <CheckCircle2 className="h-7 w-7 text-primary-foreground" />
                 </div>
-                <DialogTitle className="font-display mt-6 text-3xl sm:text-4xl">
-                  Request received.
-                </DialogTitle>
+                <DialogTitle className="font-display mt-6 text-3xl sm:text-4xl">{t.lead.sentTitle}</DialogTitle>
                 <DialogDescription className="mt-3 text-muted-foreground max-w-md mx-auto">
-                  Thank you, {watch("name")?.split(" ")[0] || "there"}. A senior partner will reach out to <span className="text-foreground">{watch("email")}</span> within one business day with the next steps for your {variant === "strategy" ? "strategy session" : "AI growth roadmap"}.
+                  {t.lead.sentBody(watch("name")?.split(" ")[0] || "—", watch("email") || "—", variant)}
                 </DialogDescription>
-                <div className="mt-7 grid gap-3 sm:grid-cols-3 text-left">
-                  {[
-                    { k: "Step 1", v: "Discovery call (30 min)" },
-                    { k: "Step 2", v: variant === "strategy" ? "90-min strategy session" : "Roadmap delivery" },
-                    { k: "Step 3", v: "Phased rollout plan" },
-                  ].map((s) => (
+                <div className="mt-7 grid gap-3 sm:grid-cols-3 text-start">
+                  {stepsList.map((s) => (
                     <div key={s.k} className="glass rounded-2xl p-4">
                       <div className="text-[11px] uppercase tracking-widest text-electric">{s.k}</div>
                       <div className="mt-1 text-sm">{s.v}</div>
@@ -217,7 +181,7 @@ export function LeadDialog({
                   onClick={() => handleOpenChange(false)}
                   className="mt-8 inline-flex items-center justify-center gap-2 rounded-full glass-strong px-6 py-2.5 text-sm hover:bg-white/10"
                 >
-                  Close
+                  {t.lead.close}
                 </button>
               </motion.div>
             )}
