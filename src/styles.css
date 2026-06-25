@@ -130,8 +130,8 @@
   }
   /* Native-feeling tabular numerics for AR pricing/scores */
   html[lang="ar"] .font-display {
-    font-family: "Cairo", "IBM Plex Sans Arabic", serif;
-    font-weight: 600;
+    font-family: "Tajawal", "IBM Plex Sans Arabic", "Cairo", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
     letter-spacing: 0;
   }
 }
