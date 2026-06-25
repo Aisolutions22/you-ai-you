@@ -128,4 +128,22 @@ export interface Dictionary {
     close: string;
   };
   language: { label: string; en: string; ar: string; switchTo: string };
+  whatsapp: {
+    title: string; description: string; openButton: string; cancel: string; summaryLabel: string;
+    leadTitle: string; leadDescription: string;
+    assessmentTitle: string; assessmentDescription: string;
+    roiTitle: string; roiDescription: string;
+    contactTitle: string; contactDescription: string;
+    fields: {
+      type: string; name: string; email: string; company: string; role: string; phone: string;
+      industry: string; size: string; employees: string; challenge: string; message: string;
+      readiness: string; growth: string; automation: string; savings: string;
+      recommended: string; hoursSaved: string; costSaved: string; productivity: string; revenue: string;
+      revenueUplift: string; annualRevenue: string; avgSalary: string; hoursWeekly: string;
+    };
+    types: { roadmap: string; strategy: string; assessment: string; roi: string; contact: string; quote: string };
+  };
+  cta: {
+    getRoadmap: string; bookExecutive: string; customQuote: string; contactUs: string;
+  };
 }

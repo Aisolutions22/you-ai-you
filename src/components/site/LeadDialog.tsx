@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, CheckCircle2, Loader2, X, Calendar, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, Loader2, Calendar, Sparkles, MessageCircle } from "lucide-react";
 
 import {
   Dialog,
@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useT } from "@/lib/i18n";
+import { openWhatsApp, trackCta, formatSummary, type WAPayload } from "@/lib/whatsapp";
 
 type Variant = "roadmap" | "strategy";
 type SizeOpt = "1–10" | "11–50" | "51–200" | "201–1000" | "1000+";
@@ -31,6 +32,7 @@ export function LeadDialog({ variant = "roadmap", children }: { variant?: Varian
   const t = useT();
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
+  const [payload, setPayload] = useState<WAPayload | null>(null);
 
   const meta = t.lead[variant];
   const Icon = variant === "strategy" ? Calendar : Sparkles;
@@ -55,15 +57,36 @@ export function LeadDialog({ variant = "roadmap", children }: { variant?: Varian
   const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting }, reset } = form;
   const size = watch("size");
 
-  const onSubmit = async (_values: LeadForm) => {
-    await new Promise((r) => setTimeout(r, 700));
+  const onSubmit = async (values: LeadForm) => {
+    await new Promise((r) => setTimeout(r, 500));
+    const f = t.whatsapp.fields;
+    const p: WAPayload = {
+      type: variant,
+      fields: [
+        { label: f.type, value: t.whatsapp.types[variant] },
+        { label: f.name, value: values.name },
+        { label: f.email, value: values.email },
+        { label: f.company, value: values.company },
+        { label: f.role, value: values.role ?? "" },
+        { label: f.phone, value: values.phone ?? "" },
+        { label: f.industry, value: values.industry },
+        { label: f.size, value: values.size },
+        { label: f.message, value: values.message ?? "" },
+      ],
+    };
+    setPayload(p);
+    trackCta(`lead_submit_${variant}`, { type: variant });
     setDone(true);
     toast.success(meta.success, { description: t.lead.successDescription });
   };
 
+  const handleOpenWA = () => {
+    if (payload) openWhatsApp(payload);
+  };
+
   const handleOpenChange = (v: boolean) => {
     setOpen(v);
-    if (!v) setTimeout(() => { setDone(false); reset(); }, 250);
+    if (!v) setTimeout(() => { setDone(false); setPayload(null); reset(); }, 250);
   };
 
   const stepsList = variant === "strategy" ? t.lead.steps.strategy : t.lead.steps.roadmap;
@@ -169,7 +192,13 @@ export function LeadDialog({ variant = "roadmap", children }: { variant?: Varian
                 <DialogDescription className="mt-3 text-muted-foreground max-w-md mx-auto">
                   {t.lead.sentBody(watch("name")?.split(" ")[0] || "—", watch("email") || "—", variant)}
                 </DialogDescription>
-                <div className="mt-7 grid gap-3 sm:grid-cols-3 text-start">
+                {payload && (
+                  <div className="mt-6 rounded-2xl glass border border-white/10 p-4 text-sm leading-relaxed whitespace-pre-line text-start max-h-48 overflow-auto">
+                    <div className="text-[11px] uppercase tracking-widest text-electric mb-2">{t.whatsapp.summaryLabel}</div>
+                    {formatSummary(payload)}
+                  </div>
+                )}
+                <div className="mt-6 grid gap-3 sm:grid-cols-3 text-start">
                   {stepsList.map((s) => (
                     <div key={s.k} className="glass rounded-2xl p-4">
                       <div className="text-[11px] uppercase tracking-widest text-electric">{s.k}</div>
@@ -177,12 +206,21 @@ export function LeadDialog({ variant = "roadmap", children }: { variant?: Varian
                     </div>
                   ))}
                 </div>
-                <button
-                  onClick={() => handleOpenChange(false)}
-                  className="mt-8 inline-flex items-center justify-center gap-2 rounded-full glass-strong px-6 py-2.5 text-sm hover:bg-white/10"
-                >
-                  {t.lead.close}
-                </button>
+                <div className="mt-7 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-center gap-3">
+                  <button
+                    onClick={() => handleOpenChange(false)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full glass-strong px-6 py-2.5 text-sm hover:bg-white/10"
+                  >
+                    {t.lead.close}
+                  </button>
+                  <button
+                    onClick={handleOpenWA}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
+                  >
+                    <MessageCircle className="h-4 w-4" /> {t.whatsapp.openButton}
+                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                  </button>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

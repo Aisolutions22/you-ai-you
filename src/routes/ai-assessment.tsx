@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { Section, SectionHeading } from "@/components/site/Section";
-import { LeadDialog } from "@/components/site/LeadDialog";
+import { WhatsAppCTA } from "@/components/site/WhatsAppConfirmDialog";
+import { type WAPayload } from "@/lib/whatsapp";
 import { useMemo, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Brain, Target, Zap, DollarSign, Calendar } from "lucide-react";
+import { ArrowRight, Brain, Target, Zap, DollarSign, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useT } from "@/lib/i18n";
 
@@ -87,11 +88,30 @@ function AssessmentPage() {
                 </div>
                 <div className="font-display mt-1 text-4xl text-gradient">${scores.savings.toLocaleString()}</div>
               </div>
-              <LeadDialog variant="strategy">
-                <button type="button" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow">
-                  <Calendar className="h-4 w-4" /> {t.common.bookSession} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                </button>
-              </LeadDialog>
+              <WhatsAppCTA
+                eventName="cta_assessment_whatsapp"
+                payload={(): WAPayload => ({
+                  type: "assessment",
+                  fields: [
+                    { label: t.whatsapp.fields.type, value: t.whatsapp.types.assessment },
+                    { label: t.whatsapp.fields.company, value: "—" },
+                    { label: t.whatsapp.fields.industry, value: sector },
+                    { label: t.whatsapp.fields.size, value: size },
+                    { label: t.whatsapp.fields.employees, value: String(employees) },
+                    { label: t.whatsapp.fields.challenge, value: challenges.join(", ") || "—" },
+                    { label: t.whatsapp.fields.readiness, value: `${scores.readiness}/100` },
+                    { label: t.whatsapp.fields.growth, value: `${scores.growth}/100` },
+                    { label: t.whatsapp.fields.automation, value: `${scores.automation}/100` },
+                    { label: t.whatsapp.fields.savings, value: `$${scores.savings.toLocaleString()}` },
+                  ],
+                })}
+              >
+                {(openCTA) => (
+                  <button type="button" onClick={openCTA} className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow">
+                    <MessageCircle className="h-4 w-4" /> {t.cta.bookExecutive} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                  </button>
+                )}
+              </WhatsAppCTA>
             </div>
           </div>
         </div>

@@ -8,8 +8,10 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, MapPin, ArrowRight, CheckCircle2, MessageCircle } from "lucide-react";
 import { useT } from "@/lib/i18n";
+import { WhatsAppConfirmDialog } from "@/components/site/WhatsAppConfirmDialog";
+import { openWhatsApp, trackCta, type WAPayload } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -33,6 +35,8 @@ type FormVals = {
 function ContactPage() {
   const t = useT();
   const [sent, setSent] = useState(false);
+  const [waOpen, setWaOpen] = useState(false);
+  const [payload, setPayload] = useState<WAPayload | null>(null);
 
   const schema = useMemo(() => z.object({
     name: z.string().trim().min(2, t.lead.errors.name).max(100),
@@ -50,9 +54,26 @@ function ContactPage() {
     mode: "onBlur",
   });
 
-  const onSubmit = async (_v: FormVals) => {
-    await new Promise((r) => setTimeout(r, 600));
+  const onSubmit = async (v: FormVals) => {
+    await new Promise((r) => setTimeout(r, 400));
+    const f = t.whatsapp.fields;
+    const p: WAPayload = {
+      type: "contact",
+      fields: [
+        { label: f.type, value: t.whatsapp.types.contact },
+        { label: f.name, value: v.name },
+        { label: f.email, value: v.email },
+        { label: f.company, value: v.company },
+        { label: f.role, value: v.role ?? "" },
+        { label: f.industry, value: v.industry },
+        { label: f.phone, value: v.phone ?? "" },
+        { label: f.message, value: v.help ?? "" },
+      ],
+    };
+    setPayload(p);
+    trackCta("cta_contact_submit", { type: "contact" });
     setSent(true);
+    setWaOpen(true);
   };
 
   return (
@@ -72,6 +93,13 @@ function ContactPage() {
                 </div>
                 <h3 className="font-display mt-5 text-3xl">{t.contact.success.title}</h3>
                 <p className="mt-2 text-muted-foreground">{t.contact.success.sub}</p>
+                <button
+                  type="button"
+                  onClick={() => { if (payload) openWhatsApp(payload); }}
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow"
+                >
+                  <MessageCircle className="h-4 w-4" /> {t.whatsapp.openButton} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                </button>
               </div>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2">
@@ -85,11 +113,20 @@ function ContactPage() {
                   <Field label={t.contact.fields.help}><Textarea rows={5} maxLength={1000} placeholder={t.contact.fields.placeholders.help} {...register("help")} /></Field>
                 </div>
                 <button type="submit" disabled={isSubmitting} className="sm:col-span-2 mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow disabled:opacity-70">
-                  {t.contact.submit} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                  <MessageCircle className="h-4 w-4" /> {t.cta.contactUs} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </button>
               </div>
             )}
           </form>
+          {payload && (
+            <WhatsAppConfirmDialog
+              open={waOpen}
+              onOpenChange={setWaOpen}
+              payload={payload}
+              title={t.whatsapp.contactTitle}
+              description={t.whatsapp.contactDescription}
+            />
+          )}
 
           <div className="grid gap-4">
             <InfoCard icon={MapPin} title={t.contact.cards.hq.title} lines={t.contact.cards.hq.lines} />
