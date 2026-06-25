@@ -122,6 +122,7 @@ function verifyPayloadInMessage(payload: WAPayload, message: string) {
 }
 
 function exposeWhatsAppDebug(result: WhatsAppOpenResult) {
+  if (!import.meta.env.DEV) return;
   const w = window as WindowWithWhatsAppDebug;
   w.__youAiLastWhatsAppUrl = result.url;
   w.__youAiLastWhatsAppMessage = result.message;
