@@ -11,6 +11,8 @@ import {
 import { SiteLayout } from "@/components/site/Layout";
 import { Section, SectionHeading, SectionEyebrow } from "@/components/site/Section";
 import { LeadDialog } from "@/components/site/LeadDialog";
+import { WhatsAppCTA } from "@/components/site/WhatsAppConfirmDialog";
+import { trackCta, type WAPayload } from "@/lib/whatsapp";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
