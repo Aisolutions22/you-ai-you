@@ -85,9 +85,9 @@ function Hero() {
       <motion.div style={{ y: y2 }} className="pointer-events-none absolute top-20 end-[-180px] h-[520px] w-[520px] rounded-full bg-electric/35 blur-[160px] animate-orb" />
       <div className="pointer-events-none absolute bottom-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-ember/20 blur-[180px]" />
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-10 pb-14 sm:pt-16 sm:pb-20 lg:pt-20">
+      <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-10 sm:pt-6 sm:pb-14 lg:pt-8">
         {/* Content + portrait grid */}
-        <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
+        <div className="grid items-center gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
           {/* LEFT — copy */}
           <div className="relative z-10 text-start">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -100,7 +100,7 @@ function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.05 }}
-              className="font-display mt-6 text-xl text-mist/80 sm:text-2xl"
+              className="font-display mt-3 text-lg text-mist/80 sm:text-xl"
             >
               {t.hero.headlineAr}
             </motion.p>
@@ -109,12 +109,13 @@ function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.12 }}
-              className="font-display mt-3 text-[44px] leading-[0.98] sm:text-6xl lg:text-[76px]"
+              className="font-display mt-2 text-[36px] leading-[1.02] sm:text-5xl lg:text-[60px]"
             >
               {t.hero.headlineEn1}<br />
               <span className="text-gradient italic">{t.hero.headlineEnHi}</span><br />
               {t.hero.headlineEn2}
             </motion.h1>
+
 
             <motion.p
               initial={{ opacity: 0, y: 14 }}
