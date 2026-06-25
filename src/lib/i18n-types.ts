@@ -121,7 +121,7 @@ export interface Dictionary {
     strategy: { eyebrow: string; title: string; sub: string; cta: string; success: string; messageLabel: string };
     fields: { name: string; email: string; company: string; role: string; industry: string; phone: string; size: string; message: string };
     placeholders: { name: string; email: string; company: string; role: string; industry: string; phone: string; message: string };
-    sending: string; consent: string; successDescription: string; sentTitle: string;
+    sending: string; consent: string; successDescription: string; sentTitle: string; redirecting: string;
     sentBody: (name: string, email: string, variant: "roadmap" | "strategy") => string;
     steps: { strategy: { k: string; v: string }[]; roadmap: { k: string; v: string }[] };
     errors: { name: string; email: string; company: string; size: string; industry: string };
