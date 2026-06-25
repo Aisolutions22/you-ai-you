@@ -22,8 +22,14 @@ export function trackCta(event: string, detail?: Record<string, unknown>) {
 export function openWhatsApp(payload?: WAPayload) {
   if (typeof window === "undefined") return;
   trackCta("whatsapp_open", { type: payload?.type });
-  // Open in a new tab; URL never rendered in the DOM.
-  const w = window.open(WA_URL, "_blank", "noopener,noreferrer");
+  // Build a prefilled WhatsApp deep-link with the structured summary.
+  // The destination URL is constructed in JS so it is never rendered in the DOM.
+  let url = WA_URL;
+  if (payload) {
+    const text = formatWhatsAppMessage(payload);
+    if (text) url = `${WA_URL}?text=${encodeURIComponent(text)}`;
+  }
+  const w = window.open(url, "_blank", "noopener,noreferrer");
   if (w) w.opener = null;
 }
 
@@ -32,4 +38,11 @@ export function formatSummary(payload: WAPayload): string {
     .filter((f) => f.value && String(f.value).trim().length > 0)
     .map((f) => `${f.label}: ${f.value}`)
     .join("\n");
+}
+
+// Full WhatsApp message: branded header + structured summary.
+export function formatWhatsAppMessage(payload: WAPayload): string {
+  const header = "You AI — New Lead";
+  const body = formatSummary(payload);
+  return `${header}\n\n${body}`;
 }

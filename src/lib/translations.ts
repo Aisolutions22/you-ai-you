@@ -405,6 +405,7 @@ const en: Dictionary = {
     consent: "By submitting, you agree to be contacted by You AI. We never share your details.",
     successDescription: "We'll be in touch within one business day.",
     sentTitle: "Request received.",
+    redirecting: "Your summary is ready. Opening WhatsApp to send your details to the You AI team.",
     sentBody: (name: string, email: string, variant: "roadmap" | "strategy") =>
       `Thank you, ${name}. A senior partner will reach out to ${email} within one business day with the next steps for your ${variant === "strategy" ? "strategy session" : "AI growth roadmap"}.`,
     steps: {
@@ -879,6 +880,7 @@ const ar: Dictionary = {
     consent: "بإرسالك للطلب، توافق على تواصلنا معك من You AI. لن نشارك بياناتك مع أي طرف.",
     successDescription: "سنتواصل معك خلال يوم عمل واحد.",
     sentTitle: "تم استلام الطلب.",
+    redirecting: "تم إعداد ملخصك بنجاح. سيتم فتح واتساب لإرسال البيانات إلى فريق You AI.",
     sentBody: (name: string, email: string, variant: "roadmap" | "strategy") =>
       `شكراً ${name}. سيتواصل معك أحد كبار شركائنا على ${email} خلال يوم عمل واحد بشأن خطواتك التالية ${variant === "strategy" ? "للجلسة الاستراتيجية" : "لخارطة طريق النمو بالذكاء الاصطناعي"}.`,
     steps: {
