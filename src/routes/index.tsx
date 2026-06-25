@@ -771,6 +771,38 @@ function ROICalculator() {
           <ResultCard label={t.roi.labels.costSaved} value={`$${results.costSaved.toLocaleString()}`} accent="magenta" />
           <ResultCard label={t.roi.labels.productivity} value={`+${results.productivity}%`} accent="ember" />
           <ResultCard label={t.roi.labels.revenueUplift} value={`$${results.revenueUplift.toLocaleString()}`} accent="magenta" big />
+          <div className="sm:col-span-2">
+            <WhatsAppCTA
+              eventName="cta_roi_quote"
+              title={t.whatsapp.roiTitle}
+              description={t.whatsapp.roiDescription}
+              payload={(): WAPayload => ({
+                type: "roi",
+                fields: [
+                  { label: t.whatsapp.fields.type, value: t.whatsapp.types.roi },
+                  { label: t.whatsapp.fields.employees, value: String(employees) },
+                  { label: t.whatsapp.fields.avgSalary, value: `$${salary.toLocaleString()}` },
+                  { label: t.whatsapp.fields.hoursWeekly, value: String(hours) },
+                  { label: t.whatsapp.fields.annualRevenue, value: `$${revenue.toLocaleString()}` },
+                  { label: t.whatsapp.fields.hoursSaved, value: results.hoursSaved.toLocaleString() },
+                  { label: t.whatsapp.fields.costSaved, value: `$${results.costSaved.toLocaleString()}` },
+                  { label: t.whatsapp.fields.productivity, value: `+${results.productivity}%` },
+                  { label: t.whatsapp.fields.revenueUplift, value: `$${results.revenueUplift.toLocaleString()}` },
+                ],
+              })}
+            >
+              {(openCTA) => (
+                <button
+                  type="button"
+                  onClick={openCTA}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
+                >
+                  <DollarSign className="h-4 w-4" /> {t.cta.customQuote}
+                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                </button>
+              )}
+            </WhatsAppCTA>
+          </div>
         </div>
       </div>
     </Section>
