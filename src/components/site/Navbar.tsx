@@ -65,9 +65,10 @@ export function Navbar() {
                 {t.nav.cta}
               </button>
             </LeadDialog>
-            <button onClick={() => setOpen((v) => !v)} aria-label={t.nav.menu} className="xl:hidden grid h-9 w-9 place-items-center rounded-full glass">
+            <button onClick={() => setOpen((v) => !v)} aria-label={t.nav.menu} className="lg:hidden grid h-9 w-9 place-items-center rounded-full glass">
               {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
+
           </div>
         </nav>
 
