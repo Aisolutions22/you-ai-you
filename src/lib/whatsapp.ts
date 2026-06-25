@@ -1,5 +1,6 @@
 // Centralized WhatsApp lead routing — destination URL is not exposed in UI.
-const WA_URL = "https://wa.me/message/4ARTFQUNTGHJO1";
+const WA_SHORT_URL = "https://wa.me/message/4ARTFQUNTGHJO1";
+const WA_MESSAGE_URL = "https://api.whatsapp.com/message/4ARTFQUNTGHJO1";
 
 export type WAField = { label: string; value: string };
 export type WAType = "roadmap" | "strategy" | "assessment" | "roi" | "contact" | "quote";
@@ -23,11 +24,14 @@ export function openWhatsApp(payload?: WAPayload) {
   if (typeof window === "undefined") return;
   trackCta("whatsapp_open", { type: payload?.type });
   // Build a prefilled WhatsApp deep-link with the structured summary.
-  // The destination URL is constructed in JS so it is never rendered in the DOM.
-  let url = WA_URL;
+  // Use the direct WhatsApp endpoint because wa.me/message redirects drop text params.
+  let url = WA_SHORT_URL;
   if (payload) {
     const text = formatWhatsAppMessage(payload);
-    if (text) url = `${WA_URL}?text=${encodeURIComponent(text)}`;
+    if (text) {
+      const params = new URLSearchParams({ text, autoload: "1", app_absent: "0" });
+      url = `${WA_MESSAGE_URL}?${params.toString()}`;
+    }
   }
   const w = window.open(url, "_blank", "noopener,noreferrer");
   if (w) w.opener = null;
@@ -42,7 +46,11 @@ export function formatSummary(payload: WAPayload): string {
 
 // Full WhatsApp message: branded header + structured summary.
 export function formatWhatsAppMessage(payload: WAPayload): string {
-  const header = "You AI — New Lead";
-  const body = formatSummary(payload);
+  const header = payload.type === "roadmap" || payload.type === "strategy"
+    ? "🚀 New Lead From You AI Website"
+    : "🚀 New Inquiry From You AI Website";
+  const body = payload.fields
+    .map((f) => `${f.label}:\n${String(f.value ?? "").trim() || "—"}`)
+    .join("\n\n");
   return `${header}\n\n${body}`;
 }
