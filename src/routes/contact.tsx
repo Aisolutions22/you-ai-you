@@ -93,6 +93,13 @@ function ContactPage() {
                 </div>
                 <h3 className="font-display mt-5 text-3xl">{t.contact.success.title}</h3>
                 <p className="mt-2 text-muted-foreground">{t.contact.success.sub}</p>
+                <button
+                  type="button"
+                  onClick={() => { if (payload) openWhatsApp(payload); }}
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow"
+                >
+                  <MessageCircle className="h-4 w-4" /> {t.whatsapp.openButton} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                </button>
               </div>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2">
@@ -106,11 +113,20 @@ function ContactPage() {
                   <Field label={t.contact.fields.help}><Textarea rows={5} maxLength={1000} placeholder={t.contact.fields.placeholders.help} {...register("help")} /></Field>
                 </div>
                 <button type="submit" disabled={isSubmitting} className="sm:col-span-2 mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow disabled:opacity-70">
-                  {t.contact.submit} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                  <MessageCircle className="h-4 w-4" /> {t.cta.contactUs} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </button>
               </div>
             )}
           </form>
+          {payload && (
+            <WhatsAppConfirmDialog
+              open={waOpen}
+              onOpenChange={setWaOpen}
+              payload={payload}
+              title={t.whatsapp.contactTitle}
+              description={t.whatsapp.contactDescription}
+            />
+          )}
 
           <div className="grid gap-4">
             <InfoCard icon={MapPin} title={t.contact.cards.hq.title} lines={t.contact.cards.hq.lines} />
