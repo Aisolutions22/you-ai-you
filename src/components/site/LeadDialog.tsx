@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, CheckCircle2, Loader2, Calendar, Sparkles, MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, Loader2, Calendar, Sparkles } from "lucide-react";
 
 import {
   Dialog,
@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useT } from "@/lib/i18n";
-import { openWhatsApp, trackCta, formatSummary, type WAPayload } from "@/lib/whatsapp";
+import { openWhatsApp, trackCta, type WAPayload } from "@/lib/whatsapp";
 
 type Variant = "roadmap" | "strategy";
 type SizeOpt = "1–10" | "11–50" | "51–200" | "201–1000" | "1000+";
@@ -31,8 +31,6 @@ const SIZES: readonly SizeOpt[] = ["1–10", "11–50", "51–200", "201–1000"
 export function LeadDialog({ variant = "roadmap", children }: { variant?: Variant; children: React.ReactNode }) {
   const t = useT();
   const [open, setOpen] = useState(false);
-  const [done, setDone] = useState(false);
-  const [payload, setPayload] = useState<WAPayload | null>(null);
 
   const meta = t.lead[variant];
   const Icon = variant === "strategy" ? Calendar : Sparkles;
@@ -58,7 +56,6 @@ export function LeadDialog({ variant = "roadmap", children }: { variant?: Varian
   const size = watch("size");
 
   const onSubmit = async (values: LeadForm) => {
-    await new Promise((r) => setTimeout(r, 500));
     const f = t.whatsapp.fields;
     const p: WAPayload = {
       type: variant,
@@ -74,20 +71,19 @@ export function LeadDialog({ variant = "roadmap", children }: { variant?: Varian
         { label: f.message, value: values.message ?? "" },
       ],
     };
-    setPayload(p);
     trackCta(`lead_submit_${variant}`, { type: variant });
-    setDone(true);
-    toast.success(meta.success, { description: t.lead.successDescription });
-  };
-
-  const handleOpenWA = () => {
-    if (payload) openWhatsApp(payload);
+    toast.success(meta.success, { description: t.lead.redirecting });
+    // Close the dialog and open WhatsApp in a new tab with the prefilled summary.
+    setOpen(false);
+    setTimeout(() => { reset(); }, 250);
+    openWhatsApp(p);
   };
 
   const handleOpenChange = (v: boolean) => {
     setOpen(v);
-    if (!v) setTimeout(() => { setDone(false); setPayload(null); reset(); }, 250);
+    if (!v) setTimeout(() => { reset(); }, 250);
   };
+
 
   const stepsList = variant === "strategy" ? t.lead.steps.strategy : t.lead.steps.roadmap;
 
