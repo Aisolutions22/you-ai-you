@@ -85,43 +85,39 @@ function Hero() {
       <motion.div style={{ y: y2 }} className="pointer-events-none absolute top-20 end-[-180px] h-[520px] w-[520px] rounded-full bg-electric/35 blur-[160px] animate-orb" />
       <div className="pointer-events-none absolute bottom-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-ember/20 blur-[180px]" />
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-10 sm:pt-6 sm:pb-14 lg:pt-8">
+      <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8">
         {/* Content + portrait grid */}
-        <div className="grid items-center gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
+        <div className="grid items-center gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
           {/* LEFT — copy */}
-          <div className="relative z-10 text-start">
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <div className="relative z-10">
+            {/* Eyebrow — centered above headline */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex justify-center lg:justify-start"
+            >
               <SectionEyebrow>{t.hero.eyebrow}</SectionEyebrow>
             </motion.div>
 
-            <motion.p
-              dir={lang === "ar" ? "ltr" : "rtl"}
-              lang={lang === "ar" ? "en" : "ar"}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.05 }}
-              className="font-display mt-3 text-lg text-mist/80 sm:text-xl"
-            >
-              {t.hero.headlineAr}
-            </motion.p>
-
+            {/* Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.12 }}
-              className="font-display mt-2 text-[36px] leading-[1.02] sm:text-5xl lg:text-[60px]"
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="font-display mt-4 text-center text-[30px] leading-[1.05] tracking-tight text-balance sm:text-[40px] lg:text-start lg:text-[52px]"
             >
-              {t.hero.headlineEn1}<br />
-              <span className="text-gradient italic">{t.hero.headlineEnHi}</span><br />
+              {t.hero.headlineEn1}{" "}
+              <span className="text-gradient">{t.hero.headlineEnHi}</span>{" "}
               {t.hero.headlineEn2}
             </motion.h1>
 
-
+            {/* Subheadline */}
             <motion.p
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.28 }}
-              className="mt-4 max-w-xl text-sm text-muted-foreground sm:text-base"
+              transition={{ duration: 0.55, delay: 0.2 }}
+              className="mx-auto mt-4 max-w-xl text-center text-sm text-muted-foreground sm:text-base lg:mx-0 lg:text-start"
             >
               {t.hero.sub}
             </motion.p>
@@ -130,8 +126,8 @@ function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.38 }}
-              className="mt-5 flex flex-wrap items-center gap-3"
+              transition={{ duration: 0.55, delay: 0.3 }}
+              className="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
             >
               <LeadDialog variant="roadmap">
                 <button type="button" className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
@@ -149,8 +145,8 @@ function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.48 }}
-              className="mt-5 flex flex-wrap gap-2"
+              transition={{ duration: 0.55, delay: 0.42 }}
+              className="mt-5 flex flex-wrap justify-center gap-2 lg:justify-start"
             >
               {t.hero.outcomeBadges.map((b, i) => {
                 const Icon = [TrendingUp, DollarSign, Zap][i] ?? Sparkles;
@@ -161,35 +157,18 @@ function Hero() {
                 );
               })}
             </motion.div>
-
-            {/* Trust stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.6 }}
-              className="mt-6 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-4"
-            >
-              {t.hero.trust.map((s) => (
-                <div key={s.v} className="glass rounded-2xl p-3 text-center">
-                  <div className="font-display text-xl text-gradient sm:text-2xl">{s.k}</div>
-                  <div className="mt-1 text-[11px] leading-tight text-muted-foreground">{s.v}</div>
-                </div>
-              ))}
-            </motion.div>
           </div>
 
-          {/* RIGHT — AI portrait */}
+          {/* RIGHT — AI portrait (smaller, guides eye toward content) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2 }}
             style={{ y: yPortrait }}
-            className="relative mx-auto h-[360px] w-full max-w-[520px] sm:h-[460px] lg:h-[540px]"
+            className="relative mx-auto hidden h-[340px] w-full max-w-[420px] lg:block lg:h-[460px]"
           >
-            {/* Glow halo */}
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_60%_40%,oklch(0.65_0.28_340/0.55),transparent_60%)] blur-2xl" />
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_70%,oklch(0.65_0.25_265/0.45),transparent_60%)] blur-2xl" />
-            {/* Subtle floating ring */}
+            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_60%_40%,oklch(0.65_0.28_340/0.45),transparent_60%)] blur-2xl" />
+            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_70%,oklch(0.65_0.25_265/0.4),transparent_60%)] blur-2xl" />
             <motion.div
               aria-hidden
               animate={{ rotate: 360 }}
@@ -201,10 +180,26 @@ function Hero() {
               alt="AI-powered transformation"
               width={1024}
               height={1536}
-              className="relative h-full w-full object-contain object-center drop-shadow-[0_30px_80px_rgba(220,40,180,0.25)] rtl:-scale-x-100"
+              className="relative h-full w-full object-contain object-center drop-shadow-[0_30px_80px_rgba(220,40,180,0.25)] ltr:-scale-x-100"
             />
           </motion.div>
         </div>
+
+        {/* Trust stats — full width below hero content */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.55 }}
+          className="mx-auto mt-8 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4"
+        >
+          {t.hero.trust.map((s) => (
+            <div key={s.v} className="glass rounded-2xl p-3 text-center">
+              <div className="font-display text-xl text-gradient sm:text-2xl">{s.k}</div>
+              <div className="mt-1 text-[11px] leading-tight text-muted-foreground">{s.v}</div>
+            </div>
+          ))}
+        </motion.div>
+
 
         {/* INDUSTRY CARDS STRIP */}
         <motion.div
