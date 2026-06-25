@@ -19,6 +19,12 @@ export interface Dictionary {
     headlineEn1: string; headlineEnHi: string; headlineEn2: string;
     sub: string; cta1: string; cta2: string;
     trust: { k: string; v: string }[];
+    outcomeBadges: string[];
+    industryStripTitle: string;
+    industryStripSub: string;
+    tapHint: string;
+    panelClose: string;
+    panelCtaPrimary: string;
   };
   journey: {
     eyebrow: string; title1: string; titleHi: string; title2: string; sub: string;
