@@ -64,10 +64,6 @@ export function Navbar() {
               {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
           </div>
-            <button onClick={() => setOpen((v) => !v)} aria-label="Menu" className="lg:hidden grid h-9 w-9 place-items-center rounded-full glass">
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </button>
-          </div>
         </nav>
 
         {open && (
@@ -81,9 +77,11 @@ export function Navbar() {
                 </li>
               ))}
               <li>
-                <Link to="/ai-assessment" onClick={() => setOpen(false)} className="mt-1 block rounded-xl bg-brand px-3 py-2 text-sm font-medium text-center text-primary-foreground">
-                  Get Your AI Growth Roadmap
-                </Link>
+                <LeadDialog variant="roadmap">
+                  <button type="button" onClick={() => setOpen(false)} className="mt-1 block w-full rounded-xl bg-brand px-3 py-2 text-sm font-medium text-center text-primary-foreground">
+                    Get Your AI Growth Roadmap
+                  </button>
+                </LeadDialog>
               </li>
             </ul>
           </div>
