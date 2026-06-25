@@ -29,7 +29,11 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "From automation and digital transformation to AI-powered growth, sales and customer service systems." },
       { property: "og:url", content: "/" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [
+      { rel: "canonical", href: "/" },
+      { rel: "preload", as: "image", href: heroPortraitSm, fetchpriority: "high", media: "(max-width: 1023px)" },
+      { rel: "preload", as: "image", href: heroPortrait, fetchpriority: "high", media: "(min-width: 1024px)" },
+    ],
   }),
   component: HomePage,
 });
