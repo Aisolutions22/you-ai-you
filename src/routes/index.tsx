@@ -87,6 +87,16 @@ function Hero() {
       <motion.div style={{ y: y2 }} className="pointer-events-none absolute top-20 end-[-180px] h-[520px] w-[520px] rounded-full bg-electric/35 blur-[160px] animate-orb" />
         <div className="pointer-events-none absolute bottom-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-ember/20 blur-[180px]" />
 
+      {/* Desktop depth: heavily blurred silhouette behind the content for premium layering */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 hidden lg:block">
+        <img
+          src={heroPortrait}
+          alt=""
+          aria-hidden
+          className="absolute left-[42%] top-1/2 h-[120%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.12] blur-[26px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+        />
+      </div>
+
       {/* Mobile-only atmospheric AI portrait background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 lg:hidden">
         <img
@@ -98,9 +108,9 @@ function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/80" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8">
+      <div className="relative mx-auto max-w-7xl px-6 pt-2 pb-6 sm:pt-4 sm:pb-10 lg:pt-6">
         {/* Content + portrait grid */}
-        <div className="grid items-center gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+        <div className="grid items-center gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
           {/* LEFT — copy */}
           <div className="relative z-10">
             {/* Eyebrow — centered above headline */}
@@ -111,6 +121,7 @@ function Hero() {
               className="flex justify-center lg:justify-start"
             >
               <SectionEyebrow>{t.hero.eyebrow}</SectionEyebrow>
+
             </motion.div>
 
             {/* Headline */}
@@ -118,7 +129,7 @@ function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display mt-4 text-center text-[30px] leading-[1.05] tracking-tight text-balance sm:text-[40px] lg:text-start lg:text-[52px]"
+              className="font-display mt-3 text-center text-[28px] leading-[1.05] tracking-tight text-balance sm:text-[36px] lg:text-start lg:text-[48px]"
             >
               {t.hero.headlineEn1}{" "}
               <span className="text-gradient">{t.hero.headlineEnHi}</span>{" "}
@@ -130,7 +141,7 @@ function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.2 }}
-              className="mx-auto mt-4 max-w-xl text-center text-sm text-muted-foreground sm:text-base lg:mx-0 lg:text-start"
+              className="mx-auto mt-3 max-w-xl text-center text-sm text-muted-foreground sm:text-base lg:mx-0 lg:text-start"
             >
               {t.hero.sub}
             </motion.p>
@@ -140,8 +151,9 @@ function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.3 }}
-              className="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+              className="mt-4 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
             >
+
               <LeadDialog variant="roadmap">
                 <button type="button" className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
                   {t.hero.cta1}
