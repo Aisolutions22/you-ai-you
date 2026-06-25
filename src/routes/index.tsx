@@ -121,17 +121,36 @@ function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.28 }}
-              className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg"
+              className="mt-4 max-w-xl text-sm text-muted-foreground sm:text-base"
             >
               {t.hero.sub}
             </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.38 }}
+              className="mt-5 flex flex-wrap items-center gap-3"
+            >
+              <LeadDialog variant="roadmap">
+                <button type="button" className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
+                  {t.hero.cta1}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+                </button>
+              </LeadDialog>
+              <a href="#engines" className="group inline-flex items-center gap-2 rounded-full glass-strong px-6 py-3 text-sm font-medium hover:bg-white/10">
+                {t.hero.cta2}
+                <ChevronRight className="h-4 w-4 rtl:rotate-180 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </motion.div>
 
             {/* Outcome badges */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.38 }}
-              className="mt-6 flex flex-wrap gap-2"
+              transition={{ duration: 0.55, delay: 0.48 }}
+              className="mt-5 flex flex-wrap gap-2"
             >
               {t.hero.outcomeBadges.map((b, i) => {
                 const Icon = [TrendingUp, DollarSign, Zap][i] ?? Sparkles;
@@ -143,31 +162,12 @@ function Hero() {
               })}
             </motion.div>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.48 }}
-              className="mt-8 flex flex-wrap items-center gap-3"
-            >
-              <LeadDialog variant="roadmap">
-                <button type="button" className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3.5 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
-                  {t.hero.cta1}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
-                </button>
-              </LeadDialog>
-              <a href="#engines" className="group inline-flex items-center gap-2 rounded-full glass-strong px-6 py-3.5 text-sm font-medium hover:bg-white/10">
-                {t.hero.cta2}
-                <ChevronRight className="h-4 w-4 rtl:rotate-180 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </motion.div>
-
             {/* Trust stats */}
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.6 }}
-              className="mt-10 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-4"
+              className="mt-6 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-4"
             >
               {t.hero.trust.map((s) => (
                 <div key={s.v} className="glass rounded-2xl p-3 text-center">
@@ -184,7 +184,7 @@ function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2 }}
             style={{ y: yPortrait }}
-            className="relative mx-auto h-[440px] w-full max-w-[560px] sm:h-[560px] lg:h-[640px]"
+            className="relative mx-auto h-[360px] w-full max-w-[520px] sm:h-[460px] lg:h-[540px]"
           >
             {/* Glow halo */}
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_60%_40%,oklch(0.65_0.28_340/0.55),transparent_60%)] blur-2xl" />
@@ -211,8 +211,9 @@ function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.6 }}
-          className="relative mt-14 sm:mt-20"
+          className="relative mt-10 sm:mt-14"
         >
+
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
               <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.hero.industryStripTitle}</div>
