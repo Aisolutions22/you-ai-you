@@ -17,7 +17,8 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useT, useI18n } from "@/lib/i18n";
-import heroPortrait from "@/assets/hero-ai-portrait.png";
+import heroPortrait from "@/assets/hero-ai-portrait.webp";
+import heroPortraitSm from "@/assets/hero-ai-portrait-sm.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
