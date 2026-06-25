@@ -119,8 +119,8 @@ export interface Dictionary {
   lead: {
     roadmap: { eyebrow: string; title: string; sub: string; cta: string; success: string; messageLabel: string };
     strategy: { eyebrow: string; title: string; sub: string; cta: string; success: string; messageLabel: string };
-    fields: { name: string; email: string; company: string; role: string; industry: string; phone: string; size: string; message: string };
-    placeholders: { name: string; email: string; company: string; role: string; industry: string; phone: string; message: string };
+    fields: { name: string; email: string; company: string; role: string; industry: string; phone: string; size: string; challenges: string; goals: string; notes: string; message: string };
+    placeholders: { name: string; email: string; company: string; role: string; industry: string; phone: string; goals: string; notes: string; message: string };
     sending: string; consent: string; successDescription: string; sentTitle: string; redirecting: string;
     sentBody: (name: string, email: string, variant: "roadmap" | "strategy") => string;
     steps: { strategy: { k: string; v: string }[]; roadmap: { k: string; v: string }[] };
@@ -136,7 +136,7 @@ export interface Dictionary {
     contactTitle: string; contactDescription: string;
     fields: {
       type: string; name: string; email: string; company: string; role: string; phone: string;
-      industry: string; size: string; employees: string; challenge: string; message: string;
+      industry: string; size: string; employees: string; challenge: string; challenges: string; goals: string; notes: string; message: string;
       readiness: string; growth: string; automation: string; savings: string;
       recommended: string; hoursSaved: string; costSaved: string; productivity: string; revenue: string;
       revenueUplift: string; annualRevenue: string; avgSalary: string; hoursWeekly: string;
