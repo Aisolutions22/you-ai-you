@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { Section, SectionHeading, SectionEyebrow } from "@/components/site/Section";
+import { LeadDialog } from "@/components/site/LeadDialog";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -99,10 +100,12 @@ function Hero() {
             transition={{ duration: 0.6, delay: 0.45 }}
             className="mt-10 flex flex-wrap justify-center gap-3"
           >
-            <Link to="/ai-assessment" className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
-              Get Your AI Growth Roadmap
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            <LeadDialog variant="roadmap">
+              <button type="button" className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
+                Get Your AI Growth Roadmap
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+            </LeadDialog>
             <Link to="/business-engines" className="inline-flex items-center gap-2 rounded-full glass-strong px-6 py-3 text-sm font-medium hover:bg-white/10">
               Explore Solutions
             </Link>
@@ -455,9 +458,11 @@ function Assessment() {
                 ))}
               </div>
             </div>
-            <Link to="/contact" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full glass-strong px-6 py-3 text-sm font-medium hover:bg-white/10">
-              <Calendar className="h-4 w-4" /> Book Strategy Session
-            </Link>
+            <LeadDialog variant="strategy">
+              <button type="button" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full glass-strong px-6 py-3 text-sm font-medium hover:bg-white/10">
+                <Calendar className="h-4 w-4" /> Book Strategy Session
+              </button>
+            </LeadDialog>
           </div>
         </div>
       </div>
@@ -809,9 +814,11 @@ function FinalCTA() {
             90-minute working session with our senior partners. Walk out with a transformation
             roadmap, an opportunity map and a phased ROI plan — tailored to your business.
           </p>
-          <Link to="/contact" className="mt-10 inline-flex items-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
-            <Calendar className="h-4 w-4" /> Book Executive Strategy Session
-          </Link>
+          <LeadDialog variant="strategy">
+            <button type="button" className="mt-10 inline-flex items-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]">
+              <Calendar className="h-4 w-4" /> Book Executive Strategy Session
+            </button>
+          </LeadDialog>
         </div>
       </div>
     </Section>

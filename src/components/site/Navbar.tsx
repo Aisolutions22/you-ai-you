@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Sparkles } from "lucide-react";
+import { LeadDialog } from "./LeadDialog";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -51,12 +52,14 @@ export function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <Link
-              to="/ai-assessment"
-              className="hidden sm:inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
-            >
-              Get Your AI Growth Roadmap
-            </Link>
+            <LeadDialog variant="roadmap">
+              <button
+                type="button"
+                className="hidden sm:inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
+              >
+                Get Your AI Growth Roadmap
+              </button>
+            </LeadDialog>
             <button onClick={() => setOpen((v) => !v)} aria-label="Menu" className="lg:hidden grid h-9 w-9 place-items-center rounded-full glass">
               {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -74,9 +77,11 @@ export function Navbar() {
                 </li>
               ))}
               <li>
-                <Link to="/ai-assessment" onClick={() => setOpen(false)} className="mt-1 block rounded-xl bg-brand px-3 py-2 text-sm font-medium text-center text-primary-foreground">
-                  Get Your AI Growth Roadmap
-                </Link>
+                <LeadDialog variant="roadmap">
+                  <button type="button" onClick={() => setOpen(false)} className="mt-1 block w-full rounded-xl bg-brand px-3 py-2 text-sm font-medium text-center text-primary-foreground">
+                    Get Your AI Growth Roadmap
+                  </button>
+                </LeadDialog>
               </li>
             </ul>
           </div>
