@@ -34,6 +34,7 @@ export function Footer() {
               <li><Link to="/ai-products" className="hover:text-foreground">{t.nav.products}</Link></li>
               <li><Link to="/ai-assessment" className="hover:text-foreground">{t.nav.assessment}</Link></li>
               <li><Link to="/insights" className="hover:text-foreground">{t.nav.insights}</Link></li>
+              <li><Link to="/connect" className="hover:text-foreground">Connect an AI assistant</Link></li>
             </ul>
           </div>
 

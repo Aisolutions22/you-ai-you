@@ -16,6 +16,7 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ConnectRouteImport } from './routes/connect'
 import { Route as BusinessEnginesRouteImport } from './routes/business-engines'
 import { Route as AiProductsRouteImport } from './routes/ai-products'
 import { Route as AiAssessmentRouteImport } from './routes/ai-assessment'
@@ -58,6 +59,11 @@ const IndustriesRoute = IndustriesRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectRoute = ConnectRouteImport.update({
+  id: '/connect',
+  path: '/connect',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusinessEnginesRoute = BusinessEnginesRouteImport.update({
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/ai-assessment': typeof AiAssessmentRoute
   '/ai-products': typeof AiProductsRoute
   '/business-engines': typeof BusinessEnginesRoute
+  '/connect': typeof ConnectRoute
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/insights': typeof InsightsRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/ai-assessment': typeof AiAssessmentRoute
   '/ai-products': typeof AiProductsRoute
   '/business-engines': typeof BusinessEnginesRoute
+  '/connect': typeof ConnectRoute
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/insights': typeof InsightsRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/ai-assessment': typeof AiAssessmentRoute
   '/ai-products': typeof AiProductsRoute
   '/business-engines': typeof BusinessEnginesRoute
+  '/connect': typeof ConnectRoute
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/insights': typeof InsightsRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/ai-assessment'
     | '/ai-products'
     | '/business-engines'
+    | '/connect'
     | '/contact'
     | '/industries'
     | '/insights'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/ai-assessment'
     | '/ai-products'
     | '/business-engines'
+    | '/connect'
     | '/contact'
     | '/industries'
     | '/insights'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/ai-assessment'
     | '/ai-products'
     | '/business-engines'
+    | '/connect'
     | '/contact'
     | '/industries'
     | '/insights'
@@ -216,6 +228,7 @@ export interface RootRouteChildren {
   AiAssessmentRoute: typeof AiAssessmentRoute
   AiProductsRoute: typeof AiProductsRoute
   BusinessEnginesRoute: typeof BusinessEnginesRoute
+  ConnectRoute: typeof ConnectRoute
   ContactRoute: typeof ContactRoute
   IndustriesRoute: typeof IndustriesRoute
   InsightsRoute: typeof InsightsRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connect': {
+      id: '/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof ConnectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/business-engines': {
@@ -344,6 +364,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiAssessmentRoute: AiAssessmentRoute,
   AiProductsRoute: AiProductsRoute,
   BusinessEnginesRoute: BusinessEnginesRoute,
+  ConnectRoute: ConnectRoute,
   ContactRoute: ContactRoute,
   IndustriesRoute: IndustriesRoute,
   InsightsRoute: InsightsRoute,
