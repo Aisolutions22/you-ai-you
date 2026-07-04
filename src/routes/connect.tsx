@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Copy, Check, Bot, Sparkles } from "lucide-react";
-import { Layout } from "@/components/site/Layout";
+import { SiteLayout } from "@/components/site/Layout";
 
 export const Route = createFileRoute("/connect")({
   head: () => ({
