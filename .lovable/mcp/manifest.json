@@ -1,0 +1,190 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "you-ai-mcp",
+      "version": "0.1.0",
+      "title": "You AI — Enterprise AI Transformation"
+    },
+    "tools": [
+      {
+        "name": "list_business_engines",
+        "title": "List business engines",
+        "description": "List the five You AI business transformation engines (Revenue, Operations, CX, Content, Innovation) with headline outcome and KPI.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_industries",
+        "title": "List industries",
+        "description": "List the industries You AI serves across KSA and the GCC.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_ai_products",
+        "title": "List AI products",
+        "description": "List You AI's enterprise AI product catalog.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "calculate_roi",
+        "title": "Calculate AI transformation ROI",
+        "description": "Estimate annual time saved, cost reduction, and projected revenue uplift from deploying You AI across a company. All monetary values are in the currency the caller uses (SAR by default).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "employees": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Number of employees affected."
+            },
+            "avgAnnualSalary": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Average annual fully-loaded salary per employee."
+            },
+            "hoursPerWeekOnManualWork": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 60,
+              "description": "Hours per week each employee spends on manual, automatable work."
+            },
+            "currentAnnualRevenue": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Current annual revenue."
+            },
+            "automationPct": {
+              "default": 0.5,
+              "description": "Fraction of manual work automated (0-1). Default 0.5.",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "revenueGrowthPct": {
+              "default": 0.18,
+              "description": "Expected revenue uplift fraction (0-1). Default 0.18.",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "employees",
+            "avgAnnualSalary",
+            "hoursPerWeekOnManualWork",
+            "currentAnnualRevenue"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "score_ai_readiness",
+        "title": "Score AI readiness",
+        "description": "Score a company's AI readiness, growth potential, and automation potential (each 0-100), and recommend which You AI engines to prioritize.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "companySize": {
+              "type": "string",
+              "enum": [
+                "startup",
+                "sme",
+                "midmarket",
+                "enterprise"
+              ]
+            },
+            "industry": {
+              "type": "string",
+              "description": "Industry name."
+            },
+            "employees": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "challenges": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "manual_ops",
+                  "slow_sales",
+                  "poor_cx",
+                  "data_silos",
+                  "content_bottleneck",
+                  "hiring",
+                  "compliance"
+                ]
+              },
+              "description": "Current top challenges."
+            },
+            "hasCRM": {
+              "default": false,
+              "type": "boolean"
+            },
+            "hasERP": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "companySize",
+            "industry",
+            "employees",
+            "challenges"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
