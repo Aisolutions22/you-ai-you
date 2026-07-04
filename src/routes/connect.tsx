@@ -33,7 +33,7 @@ function ConnectPage() {
   };
 
   return (
-    <Layout>
+    <SiteLayout>
       <div dir="ltr" className="mx-auto max-w-3xl px-6 py-24">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Sparkles className="h-4 w-4" /> Agent connection
@@ -102,6 +102,6 @@ function ConnectPage() {
           Once connected, your assistant discovers the available tools automatically.
         </p>
       </div>
-    </Layout>
+    </SiteLayout>
   );
 }
