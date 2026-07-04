@@ -9,6 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TransformationStoriesRouteImport } from './routes/transformation-stories'
+import { Route as TransformationJourneyRouteImport } from './routes/transformation-journey'
+import { Route as RoiCalculatorRouteImport } from './routes/roi-calculator'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -18,6 +21,21 @@ import { Route as AiAssessmentRouteImport } from './routes/ai-assessment'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TransformationStoriesRoute = TransformationStoriesRouteImport.update({
+  id: '/transformation-stories',
+  path: '/transformation-stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransformationJourneyRoute = TransformationJourneyRouteImport.update({
+  id: '/transformation-journey',
+  path: '/transformation-journey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoiCalculatorRoute = RoiCalculatorRouteImport.update({
+  id: '/roi-calculator',
+  path: '/roi-calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InsightsRoute = InsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
@@ -68,6 +86,9 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/insights': typeof InsightsRoute
+  '/roi-calculator': typeof RoiCalculatorRoute
+  '/transformation-journey': typeof TransformationJourneyRoute
+  '/transformation-stories': typeof TransformationStoriesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +99,9 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/insights': typeof InsightsRoute
+  '/roi-calculator': typeof RoiCalculatorRoute
+  '/transformation-journey': typeof TransformationJourneyRoute
+  '/transformation-stories': typeof TransformationStoriesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +113,9 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/insights': typeof InsightsRoute
+  '/roi-calculator': typeof RoiCalculatorRoute
+  '/transformation-journey': typeof TransformationJourneyRoute
+  '/transformation-stories': typeof TransformationStoriesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +128,9 @@ export interface FileRouteTypes {
     | '/contact'
     | '/industries'
     | '/insights'
+    | '/roi-calculator'
+    | '/transformation-journey'
+    | '/transformation-stories'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +141,9 @@ export interface FileRouteTypes {
     | '/contact'
     | '/industries'
     | '/insights'
+    | '/roi-calculator'
+    | '/transformation-journey'
+    | '/transformation-stories'
   id:
     | '__root__'
     | '/'
@@ -121,6 +154,9 @@ export interface FileRouteTypes {
     | '/contact'
     | '/industries'
     | '/insights'
+    | '/roi-calculator'
+    | '/transformation-journey'
+    | '/transformation-stories'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,10 +168,34 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   IndustriesRoute: typeof IndustriesRoute
   InsightsRoute: typeof InsightsRoute
+  RoiCalculatorRoute: typeof RoiCalculatorRoute
+  TransformationJourneyRoute: typeof TransformationJourneyRoute
+  TransformationStoriesRoute: typeof TransformationStoriesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/transformation-stories': {
+      id: '/transformation-stories'
+      path: '/transformation-stories'
+      fullPath: '/transformation-stories'
+      preLoaderRoute: typeof TransformationStoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transformation-journey': {
+      id: '/transformation-journey'
+      path: '/transformation-journey'
+      fullPath: '/transformation-journey'
+      preLoaderRoute: typeof TransformationJourneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roi-calculator': {
+      id: '/roi-calculator'
+      path: '/roi-calculator'
+      fullPath: '/roi-calculator'
+      preLoaderRoute: typeof RoiCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/insights': {
       id: '/insights'
       path: '/insights'
@@ -204,6 +264,9 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   IndustriesRoute: IndustriesRoute,
   InsightsRoute: InsightsRoute,
+  RoiCalculatorRoute: RoiCalculatorRoute,
+  TransformationJourneyRoute: TransformationJourneyRoute,
+  TransformationStoriesRoute: TransformationStoriesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

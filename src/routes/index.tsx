@@ -408,12 +408,27 @@ function PanelBlock({ title, items, tone }: { title: string; items: string[]; to
   );
 }
 
-/* ---------------- JOURNEY ---------------- */
+/* ---------------- TEASER HELPERS ---------------- */
+import { Link } from "@tanstack/react-router";
+
+function TeaserCTA({ to, label }: { to: any; label: string }) {
+  return (
+    <div className="mt-10 flex justify-center">
+      <Link
+        to={to}
+        className="group inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
+      >
+        {label}
+        <ArrowRight className="h-4 w-4 rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+      </Link>
+    </div>
+  );
+}
+
+/* ---------------- JOURNEY (teaser: 3/7) ---------------- */
 function Journey() {
   const t = useT();
-  const [active, setActive] = useState(0);
-  const A = t.journey.steps[active];
-  const Icon = JOURNEY_ICONS[active];
+  const steps = t.journey.steps.slice(0, 3);
   return (
     <Section id="journey">
       <SectionHeading
@@ -421,62 +436,37 @@ function Journey() {
         title={<>{t.journey.title1} <span className="text-gradient italic">{t.journey.titleHi}</span> {t.journey.title2}</>}
         description={t.journey.sub}
       />
-      <div className="mt-14 grid gap-8 lg:grid-cols-[1fr_1.1fr]">
-        <ol className="relative">
-          <div className="absolute start-5 top-3 bottom-3 w-px bg-white/10" />
-          {t.journey.steps.map((s, i) => {
-            const SIcon = JOURNEY_ICONS[i];
-            const isActive = i === active;
-            return (
-              <li key={s.k}>
-                <button
-                  onClick={() => setActive(i)}
-                  className={`relative flex w-full items-center gap-4 rounded-2xl px-3 py-3 text-start transition-colors ${isActive ? "bg-white/5" : "hover:bg-white/[0.03]"}`}
-                >
-                  <span className={`relative z-10 grid h-10 w-10 place-items-center rounded-full transition-all ${isActive ? "bg-brand shadow-glow text-primary-foreground" : "glass text-muted-foreground"}`}>
-                    <SIcon className="h-4 w-4" />
-                  </span>
-                  <span className="flex-1">
-                    <span className="block text-xs uppercase tracking-widest text-muted-foreground">{t.journey.stepLabel} 0{i + 1}</span>
-                    <span className={`block font-display text-2xl ${isActive ? "text-foreground" : "text-mist"}`}>{s.k}</span>
-                  </span>
-                  <ChevronRight className={`h-4 w-4 rtl:rotate-180 transition-transform ${isActive ? "translate-x-1 rtl:-translate-x-1 text-foreground" : "text-muted-foreground"}`} />
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.35 }}
-            className="glass-strong shadow-card relative overflow-hidden rounded-3xl p-8 sm:p-10"
-          >
-            <div className="absolute -top-20 -end-20 h-60 w-60 rounded-full bg-magenta/30 blur-3xl" />
-            <div className="relative">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-brand shadow-glow">
-                <Icon className="h-5 w-5 text-primary-foreground" />
+      <div className="mt-14 grid gap-5 sm:grid-cols-3">
+        {steps.map((s, i) => {
+          const Icon = JOURNEY_ICONS[i];
+          return (
+            <motion.div
+              key={s.k}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: i * 0.06 }}
+              className="glass-strong shadow-card relative overflow-hidden rounded-3xl p-6"
+            >
+              <div className="absolute -top-16 -end-12 h-32 w-32 rounded-full bg-magenta/25 blur-3xl" />
+              <div className="relative">
+                <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.journey.stepLabel} 0{i + 1}</div>
+                <div className="mt-3 grid h-11 w-11 place-items-center rounded-2xl bg-brand shadow-glow">
+                  <Icon className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <h3 className="font-display mt-4 text-2xl">{s.k}</h3>
+                <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{s.desc}</p>
               </div>
-              <h3 className="font-display mt-6 text-4xl">{A.k}</h3>
-              <p className="mt-3 text-muted-foreground">{A.desc}</p>
-              <div className="mt-8 grid grid-cols-3 gap-3">
-                {t.journey.chips.map((c) => (
-                  <div key={c} className="rounded-xl glass px-3 py-2 text-center text-xs text-muted-foreground">{c}</div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+            </motion.div>
+          );
+        })}
       </div>
+      <TeaserCTA to="/transformation-journey" label={t.common.exploreProgram} />
     </Section>
   );
 }
 
-/* ---------------- ENGINES ---------------- */
+/* ---------------- ENGINES (teaser: icons) ---------------- */
 function Engines() {
   const t = useT();
   return (
@@ -486,45 +476,34 @@ function Engines() {
         title={<>{t.engines.title1} <span className="text-gradient italic">{t.engines.titleHi}</span>{t.engines.title2}</>}
         description={t.engines.sub}
       />
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-14 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
         {t.engines.items.map((e, i) => {
           const Icon = ENGINE_ICONS[i];
           return (
-            <motion.article
+            <motion.div
               key={e.k}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              className="group relative overflow-hidden rounded-3xl glass-strong p-7 shadow-card transition-transform hover:-translate-y-1"
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+              className="glass-strong rounded-2xl p-5 text-center shadow-card hover:-translate-y-1 transition-transform"
             >
-              <div className="absolute -top-24 -end-20 h-52 w-52 rounded-full bg-magenta/20 blur-3xl transition-opacity group-hover:opacity-80" />
-              <div className="relative">
-                <div className="grid h-11 w-11 place-items-center rounded-2xl bg-brand shadow-glow">
-                  <Icon className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <h3 className="font-display mt-5 text-2xl">{e.k}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{e.desc}</p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {e.kpis.map((k) => (
-                    <span key={k} className="rounded-full glass px-3 py-1 text-xs text-foreground">{k}</span>
-                  ))}
-                </div>
+              <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-brand shadow-glow">
+                <Icon className="h-5 w-5 text-primary-foreground" />
               </div>
-            </motion.article>
+              <div className="font-display mt-4 text-base leading-tight">{e.k}</div>
+            </motion.div>
           );
         })}
       </div>
+      <TeaserCTA to="/business-engines" label={t.common.modelImpact} />
     </Section>
   );
 }
 
-/* ---------------- INDUSTRIES ---------------- */
+/* ---------------- INDUSTRIES (teaser: icons) ---------------- */
 function Industries() {
   const t = useT();
-  const [i, setI] = useState(0);
-  const A = t.industries.items[i];
-  const Icon = INDUSTRY_ICONS[i];
   return (
     <Section id="industries">
       <SectionHeading
@@ -532,108 +511,32 @@ function Industries() {
         title={<>{t.industries.title1} <span className="text-gradient italic">{t.industries.titleHi}</span> {t.industries.title2}</>}
         description={t.industries.sub}
       />
-      <div className="mt-14 grid gap-6 lg:grid-cols-[280px_1fr]">
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-1 lg:gap-1.5">
-          {t.industries.items.map((s, idx) => {
-            const SIcon = INDUSTRY_ICONS[idx];
-            const isActive = idx === i;
-            return (
-              <button
-                key={s.k}
-                onClick={() => setI(idx)}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${isActive ? "glass-strong text-foreground" : "text-muted-foreground hover:bg-white/5"}`}
-              >
-                <SIcon className="h-4 w-4 shrink-0" />
-                <span className="truncate">{s.k}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={A.k}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.3 }}
-            className="glass-strong shadow-card relative overflow-hidden rounded-3xl p-8 sm:p-10"
-          >
-            <div className="absolute -top-20 -start-20 h-56 w-56 rounded-full bg-electric/20 blur-3xl" />
-            <div className="relative">
-              <div className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-brand shadow-glow">
-                  <Icon className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <h3 className="font-display text-3xl">{A.k}</h3>
-              </div>
-              <div className="mt-8 grid gap-6 md:grid-cols-3">
-                <Pillar title={t.industries.pillars.challenges} items={A.challenges} />
-                <Pillar title={t.industries.pillars.solutions} items={A.solutions} />
-                <Pillar title={t.industries.pillars.impact} items={A.impact} />
-              </div>
-              <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-brand/10 border border-white/10 p-5">
-                <div>
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.industries.pillars.expectedRoi}</div>
-                  <div className="font-display text-3xl text-gradient">{A.roi}</div>
-                </div>
-                <LeadDialog variant="roadmap">
-                  <button type="button" className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-glow">
-                    {t.common.modelForCompany} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                  </button>
-                </LeadDialog>
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+      <div className="mt-14 grid gap-3 grid-cols-3 sm:grid-cols-3 lg:grid-cols-9">
+        {t.industries.items.map((s, i) => {
+          const Icon = INDUSTRY_ICONS[i];
+          return (
+            <motion.div
+              key={s.k}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: i * 0.03 }}
+              className="glass rounded-2xl p-4 text-center hover:bg-white/10 transition-colors"
+            >
+              <Icon className="mx-auto h-6 w-6 text-electric" />
+              <div className="mt-2 text-xs leading-tight text-foreground/90">{s.k}</div>
+            </motion.div>
+          );
+        })}
       </div>
+      <TeaserCTA to="/industries" label={t.common.exploreProgram} />
     </Section>
   );
 }
 
-function Pillar({ title, items }: { title: string; items: string[] }) {
-  return (
-    <div>
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">{title}</div>
-      <ul className="mt-3 grid gap-2">
-        {items.map((x) => (
-          <li key={x} className="flex items-start gap-2 text-sm">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-electric" />
-            <span>{x}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-/* ---------------- ASSESSMENT ---------------- */
+/* ---------------- ASSESSMENT (teaser: CTA card) ---------------- */
 function Assessment() {
   const t = useT();
-  const [size, setSize] = useState(t.assessment.sizes[2]);
-  const [sector, setSector] = useState(t.assessment.sectors[0]);
-  const [employees, setEmployees] = useState(120);
-  const [challenges, setChallenges] = useState<string[]>([t.assessment.challenges[0], t.assessment.challenges[3]]);
-  const [systems, setSystems] = useState<string[]>([t.assessment.systems[0]]);
-
-  const toggle = (arr: string[], v: string, set: (a: string[]) => void) =>
-    set(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
-
-  const scores = useMemo(() => {
-    const automation = Math.min(95, 35 + challenges.length * 9 + Math.min(employees, 800) / 18);
-    const growth = Math.min(96, 40 + 10 + systems.length * 5);
-    const readiness = Math.min(94, 30 + systems.filter((s) => s !== t.assessment.systems[5]).length * 11 + (employees > 50 ? 18 : 8));
-    const savings = Math.round(employees * 1800 * (automation / 100));
-    return {
-      automation: Math.round(automation),
-      growth: Math.round(growth),
-      readiness: Math.round(readiness),
-      savings,
-    };
-  }, [challenges, systems, employees, t]);
-
-  const cxRec = challenges.includes(t.assessment.challenges[2]) ? t.assessment.engineRec.cx : t.assessment.engineRec.revenue;
-
   return (
     <Section id="assessment">
       <SectionHeading
@@ -641,86 +544,28 @@ function Assessment() {
         title={<>{t.assessment.title1} <span className="text-gradient italic">{t.assessment.titleHi}</span> {t.assessment.title2}</>}
         description={t.assessment.sub}
       />
-
-      <div className="mt-14 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-        <div className="glass-strong rounded-3xl p-7 sm:p-9 shadow-card">
-          <Field label={t.assessment.labels.size}><ChipRow value={size} onChange={setSize} options={t.assessment.sizes} /></Field>
-          <Field label={t.assessment.labels.industry}><ChipRow value={sector} onChange={setSector} options={t.assessment.sectors} /></Field>
-          <Field label={t.assessment.labels.employeesText(employees)}>
-            <Slider min={5} max={2000} step={5} value={[employees]} onValueChange={(v) => setEmployees(v[0])} />
-          </Field>
-          <Field label={t.assessment.labels.challenges}>
-            <div className="flex flex-wrap gap-2">
-              {t.assessment.challenges.map((c) => (
-                <Chip key={c} active={challenges.includes(c)} onClick={() => toggle(challenges, c, setChallenges)}>{c}</Chip>
+      <div className="mt-14">
+        <div className="glass-strong shadow-card relative overflow-hidden rounded-3xl p-8 sm:p-12 text-center">
+          <div className="absolute -top-24 -start-16 h-60 w-60 rounded-full bg-magenta/30 blur-3xl" />
+          <div className="absolute -bottom-24 -end-16 h-60 w-60 rounded-full bg-electric/25 blur-3xl" />
+          <div className="relative mx-auto max-w-2xl">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand shadow-glow">
+              <Brain className="h-6 w-6 text-primary-foreground" />
+            </div>
+            <h3 className="font-display mt-6 text-3xl sm:text-4xl">{t.assessment.title1} <span className="text-gradient italic">{t.assessment.titleHi}</span></h3>
+            <p className="mt-4 text-muted-foreground">{t.assessment.sub}</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-2">
+              {[t.assessment.labels.readiness, t.assessment.labels.growth, t.assessment.labels.automation, t.assessment.labels.savings].map((l) => (
+                <span key={l} className="rounded-full glass px-3 py-1.5 text-xs">{l}</span>
               ))}
             </div>
-          </Field>
-          <Field label={t.assessment.labels.systems}>
-            <div className="flex flex-wrap gap-2">
-              {t.assessment.systems.map((s) => (
-                <Chip key={s} active={systems.includes(s)} onClick={() => toggle(systems, s, setSystems)}>{s}</Chip>
-              ))}
-            </div>
-          </Field>
-        </div>
-
-        <div className="glass-strong rounded-3xl p-7 sm:p-9 shadow-card relative overflow-hidden">
-          <div className="absolute -top-20 -end-20 h-60 w-60 rounded-full bg-magenta/30 blur-3xl" />
-          <div className="relative">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.assessment.labels.snapshot}</div>
-            <h3 className="font-display mt-2 text-3xl">{sector} · {size}</h3>
-            <div className="mt-6 grid gap-4">
-              <ScoreBar label={t.assessment.labels.readiness} value={scores.readiness} icon={Brain} />
-              <ScoreBar label={t.assessment.labels.growth} value={scores.growth} icon={Target} />
-              <ScoreBar label={t.assessment.labels.automation} value={scores.automation} icon={Zap} />
-            </div>
-            <div className="mt-7 rounded-2xl border border-white/10 bg-brand/10 p-5">
-              <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
-                <DollarSign className="h-3.5 w-3.5" /> {t.assessment.labels.savings}
-              </div>
-              <div className="font-display mt-1 text-4xl text-gradient">${scores.savings.toLocaleString()}</div>
-              <p className="mt-2 text-xs text-muted-foreground">{t.assessment.labels.savingsHint}</p>
-            </div>
-            <div className="mt-6">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.assessment.labels.recommended}</div>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {[t.assessment.engineRec.ops, cxRec, t.assessment.engineRec.content].map((r) => (
-                  <span key={r} className="rounded-full glass px-3 py-1 text-xs">{r}</span>
-                ))}
-              </div>
-            </div>
-            <WhatsAppCTA
-              eventName="cta_assessment_whatsapp"
-              title={t.whatsapp.assessmentTitle}
-              description={t.whatsapp.assessmentDescription}
-              payload={(): WAPayload => ({
-                type: "assessment",
-                fields: [
-                  { label: t.whatsapp.fields.type, value: t.whatsapp.types.assessment },
-                  { label: t.whatsapp.fields.company, value: "—" },
-                  { label: t.whatsapp.fields.industry, value: sector },
-                  { label: t.whatsapp.fields.size, value: size },
-                  { label: t.whatsapp.fields.employees, value: String(employees) },
-                  { label: t.whatsapp.fields.challenge, value: challenges.join(", ") || "—" },
-                  { label: t.whatsapp.fields.readiness, value: `${scores.readiness}/100` },
-                  { label: t.whatsapp.fields.growth, value: `${scores.growth}/100` },
-                  { label: t.whatsapp.fields.automation, value: `${scores.automation}/100` },
-                  { label: t.whatsapp.fields.savings, value: `$${scores.savings.toLocaleString()}` },
-                  { label: t.whatsapp.fields.recommended, value: [t.assessment.engineRec.ops, cxRec, t.assessment.engineRec.content].join(", ") },
-                ],
-              })}
+            <Link
+              to="/ai-assessment"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
             >
-              {(openCTA) => (
-                <button
-                  type="button"
-                  onClick={openCTA}
-                  className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-primary-foreground shadow-glow"
-                >
-                  <Calendar className="h-4 w-4" /> {t.cta.bookExecutive}
-                </button>
-              )}
-            </WhatsAppCTA>
+              <Calendar className="h-4 w-4" /> {t.cta.bookExecutive}
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            </Link>
           </div>
         </div>
       </div>
@@ -728,65 +573,9 @@ function Assessment() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="mb-5">
-      <Label className="text-xs uppercase tracking-widest text-muted-foreground">{label}</Label>
-      <div className="mt-2">{children}</div>
-    </div>
-  );
-}
-function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button onClick={onClick} className={`rounded-full px-3 py-1.5 text-xs transition-colors ${active ? "bg-brand text-primary-foreground shadow-glow" : "glass hover:bg-white/10 text-foreground"}`}>{children}</button>
-  );
-}
-function ChipRow({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: readonly string[] }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((o) => (
-        <Chip key={o} active={value === o} onClick={() => onChange(o)}>{o}</Chip>
-      ))}
-    </div>
-  );
-}
-function ScoreBar({ label, value, icon: Icon }: { label: string; value: number; icon: any }) {
-  const t = useT();
-  return (
-    <div>
-      <div className="flex items-center justify-between text-sm">
-        <span className="inline-flex items-center gap-2 text-muted-foreground"><Icon className="h-4 w-4 text-electric" /> {label}</span>
-        <span className="font-display text-xl">{value}<span className="text-muted-foreground text-sm">{t.common.of100}</span></span>
-      </div>
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/5">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${value}%` }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
-          className="h-full bg-brand"
-        />
-      </div>
-    </div>
-  );
-}
-
-/* ---------------- ROI CALCULATOR ---------------- */
+/* ---------------- ROI (teaser: one number) ---------------- */
 function ROICalculator() {
   const t = useT();
-  const [employees, setEmployees] = useState(80);
-  const [salary, setSalary] = useState(45000);
-  const [hours, setHours] = useState(12);
-  const [revenue, setRevenue] = useState(8000000);
-
-  const results = useMemo(() => {
-    const hourly = salary / (52 * 40);
-    const hoursSaved = employees * hours * 0.65 * 52;
-    const costSaved = Math.round(hoursSaved * hourly);
-    const productivity = Math.round((hours * 0.65 / 40) * 100);
-    const revenueUplift = Math.round(revenue * 0.18);
-    return { hoursSaved: Math.round(hoursSaved), costSaved, productivity, revenueUplift };
-  }, [employees, salary, hours, revenue]);
-
   return (
     <Section id="roi">
       <SectionHeading
@@ -794,83 +583,32 @@ function ROICalculator() {
         title={<>{t.roi.title1} <span className="text-gradient italic">{t.roi.titleHi}</span> {t.roi.title2}</>}
         description={t.roi.sub}
       />
-      <div className="mt-14 grid gap-6 lg:grid-cols-[1fr_1.1fr]">
-        <div className="glass-strong rounded-3xl p-7 sm:p-9 shadow-card">
-          <RoiSlider label={t.roi.labels.employees} value={employees} min={5} max={2000} step={5} onChange={setEmployees} />
-          <RoiSlider label={t.roi.labels.salary} value={salary} prefix="$" min={10000} max={250000} step={1000} onChange={setSalary} />
-          <RoiSlider label={t.roi.labels.hours} value={hours} suffix={t.roi.units.hrs} min={1} max={40} step={1} onChange={setHours} />
-          <RoiSlider label={t.roi.labels.revenue} value={revenue} prefix="$" min={500000} max={500000000} step={100000} onChange={setRevenue} />
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <ResultCard label={t.roi.labels.hoursSaved} value={results.hoursSaved.toLocaleString()} accent="electric" />
-          <ResultCard label={t.roi.labels.costSaved} value={`$${results.costSaved.toLocaleString()}`} accent="magenta" />
-          <ResultCard label={t.roi.labels.productivity} value={`+${results.productivity}%`} accent="ember" />
-          <ResultCard label={t.roi.labels.revenueUplift} value={`$${results.revenueUplift.toLocaleString()}`} accent="magenta" big />
-          <div className="sm:col-span-2">
-            <WhatsAppCTA
-              eventName="cta_roi_quote"
-              title={t.whatsapp.roiTitle}
-              description={t.whatsapp.roiDescription}
-              payload={(): WAPayload => ({
-                type: "roi",
-                fields: [
-                  { label: t.whatsapp.fields.type, value: t.whatsapp.types.roi },
-                  { label: t.whatsapp.fields.employees, value: String(employees) },
-                  { label: t.whatsapp.fields.avgSalary, value: `$${salary.toLocaleString()}` },
-                  { label: t.whatsapp.fields.hoursWeekly, value: String(hours) },
-                  { label: t.whatsapp.fields.annualRevenue, value: `$${revenue.toLocaleString()}` },
-                  { label: t.whatsapp.fields.hoursSaved, value: results.hoursSaved.toLocaleString() },
-                  { label: t.whatsapp.fields.costSaved, value: `$${results.costSaved.toLocaleString()}` },
-                  { label: t.whatsapp.fields.productivity, value: `+${results.productivity}%` },
-                  { label: t.whatsapp.fields.revenueUplift, value: `$${results.revenueUplift.toLocaleString()}` },
-                ],
-              })}
+      <div className="mt-14">
+        <div className="glass-strong shadow-card relative overflow-hidden rounded-3xl p-10 sm:p-14 text-center">
+          <div className="absolute -top-24 -start-16 h-60 w-60 rounded-full bg-ember/25 blur-3xl" />
+          <div className="absolute -bottom-24 -end-16 h-60 w-60 rounded-full bg-magenta/25 blur-3xl" />
+          <div className="relative">
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.roi.labels.revenueUplift}</div>
+            <div className="font-display mt-4 text-6xl sm:text-7xl lg:text-8xl text-gradient">+18%</div>
+            <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">{t.roi.sub}</p>
+            <Link
+              to="/roi-calculator"
+              className="mt-10 inline-flex items-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
             >
-              {(openCTA) => (
-                <button
-                  type="button"
-                  onClick={openCTA}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
-                >
-                  <DollarSign className="h-4 w-4" /> {t.cta.customQuote}
-                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                </button>
-              )}
-            </WhatsAppCTA>
+              <DollarSign className="h-4 w-4" /> {t.cta.customQuote}
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            </Link>
           </div>
         </div>
       </div>
     </Section>
   );
 }
-function RoiSlider({ label, value, min, max, step, onChange, prefix = "", suffix = "" }: { label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void; prefix?: string; suffix?: string }) {
-  return (
-    <div className="mb-6">
-      <div className="flex items-baseline justify-between">
-        <Label className="text-xs uppercase tracking-widest text-muted-foreground">{label}</Label>
-        <span className="font-display text-2xl">{prefix}{value.toLocaleString()}{suffix}</span>
-      </div>
-      <div className="mt-3"><Slider min={min} max={max} step={step} value={[value]} onValueChange={(v) => onChange(v[0])} /></div>
-    </div>
-  );
-}
-function ResultCard({ label, value, accent, big }: { label: string; value: string; accent: "magenta" | "electric" | "ember"; big?: boolean }) {
-  const glow = accent === "magenta" ? "bg-magenta/30" : accent === "electric" ? "bg-electric/30" : "bg-ember/30";
-  return (
-    <div className={`relative overflow-hidden rounded-3xl glass-strong p-7 shadow-card ${big ? "sm:col-span-2" : ""}`}>
-      <div className={`absolute -top-20 -end-20 h-48 w-48 rounded-full ${glow} blur-3xl`} />
-      <div className="relative">
-        <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
-        <div className={`font-display mt-3 ${big ? "text-6xl" : "text-4xl"} text-gradient`}>{value}</div>
-      </div>
-    </div>
-  );
-}
 
-/* ---------------- PRODUCTS ---------------- */
+/* ---------------- PRODUCTS (teaser: 3/8) ---------------- */
 function Products() {
   const t = useT();
-  const [open, setOpen] = useState<number | null>(null);
+  const items = t.products.items.slice(0, 3);
   return (
     <Section id="products">
       <SectionHeading
@@ -878,70 +616,37 @@ function Products() {
         title={<>{t.products.title1} <span className="text-gradient italic">{t.products.titleHi}</span>{t.products.title2}</>}
         description={t.products.sub}
       />
-      <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {t.products.items.map((p, i) => (
-          <motion.button
+      <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((p, i) => (
+          <motion.div
             key={p.k}
-            onClick={() => setOpen(open === i ? null : i)}
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.04 }}
-            className={`group relative overflow-hidden rounded-2xl glass-strong p-5 text-start shadow-card transition-all hover:-translate-y-1 ${open === i ? "ring-1 ring-magenta/60" : ""}`}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+            className="group relative overflow-hidden rounded-2xl glass-strong p-6 shadow-card hover:-translate-y-1 transition-transform"
           >
-            <div className="absolute -top-16 -end-16 h-40 w-40 rounded-full bg-electric/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute -top-16 -end-16 h-40 w-40 rounded-full bg-electric/20 blur-3xl" />
             <div className="relative">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-brand shadow-glow">
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand shadow-glow">
                 <Sparkles className="h-4 w-4 text-primary-foreground" />
               </div>
               <h3 className="font-display mt-4 text-xl">{p.k}</h3>
-              <p className="mt-1 text-xs text-muted-foreground">{p.problem}</p>
-              <div className="mt-3 inline-flex items-center gap-1 text-xs text-electric">
-                {open === i ? t.products.labels.hide : t.products.labels.view}
-                <ChevronRight className={`h-3.5 w-3.5 rtl:rotate-180 transition-transform ${open === i ? "rotate-90 rtl:rotate-90" : ""}`} />
-              </div>
-            </div>
-          </motion.button>
-        ))}
-      </div>
-
-      <AnimatePresence>
-        {open !== null && (
-          <motion.div
-            key={open}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.35 }}
-            className="mt-6 overflow-hidden"
-          >
-            <div className="glass-strong rounded-3xl p-7 sm:p-9 shadow-card grid gap-6 md:grid-cols-4">
-              <div>
-                <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.products.labels.product}</div>
-                <h3 className="font-display mt-2 text-3xl">{t.products.items[open].k}</h3>
-              </div>
-              <Pillar title={t.products.labels.problem} items={[t.products.items[open].problem]} />
-              <Pillar title={t.products.labels.solution} items={[t.products.items[open].solution]} />
-              <div>
-                <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.products.labels.benefitsRoi}</div>
-                <ul className="mt-3 grid gap-2 text-sm">
-                  {t.products.items[open].benefits.map((b) => (
-                    <li key={b} className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-electric" />{b}</li>
-                  ))}
-                </ul>
-                <div className="font-display mt-3 text-2xl text-gradient">{t.products.items[open].roi}</div>
-              </div>
+              <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{p.problem}</p>
+              <div className="font-display mt-4 text-lg text-gradient">{p.roi}</div>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        ))}
+      </div>
+      <TeaserCTA to="/ai-products" label={t.common.exploreProgram} />
     </Section>
   );
 }
 
-/* ---------------- SCENARIOS ---------------- */
+/* ---------------- SCENARIOS (teaser: 1/5) ---------------- */
 function Scenarios() {
   const t = useT();
+  const s = t.scenarios.items[0];
   return (
     <Section id="scenarios">
       <SectionHeading
@@ -949,41 +654,40 @@ function Scenarios() {
         title={<>{t.scenarios.title1} <span className="text-gradient italic">{t.scenarios.titleHi}</span> {t.scenarios.title2}</>}
         description={t.scenarios.sub}
       />
-      <div className="mt-14 grid gap-5 lg:grid-cols-2">
-        {t.scenarios.items.map((s, i) => (
-          <motion.article
-            key={s.k}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.5, delay: i * 0.05 }}
-            className="glass-strong shadow-card relative overflow-hidden rounded-3xl p-7"
-          >
-            <div className="absolute -bottom-20 -end-16 h-52 w-52 rounded-full bg-ember/20 blur-3xl" />
-            <div className="relative">
-              <h3 className="font-display text-2xl">{s.k}</h3>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-white/10 p-4">
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.scenarios.labels.before}</div>
-                  <p className="mt-2 text-sm text-muted-foreground">{s.before}</p>
-                </div>
-                <div className="rounded-2xl bg-brand/10 border border-white/10 p-4">
-                  <div className="text-xs uppercase tracking-widest text-electric">{t.scenarios.labels.after}</div>
-                  <p className="mt-2 text-sm">{s.after}</p>
-                </div>
+      <div className="mt-14">
+        <motion.article
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5 }}
+          className="glass-strong shadow-card relative overflow-hidden rounded-3xl p-8 sm:p-10"
+        >
+          <div className="absolute -bottom-20 -end-16 h-60 w-60 rounded-full bg-ember/20 blur-3xl" />
+          <div className="relative">
+            <h3 className="font-display text-3xl">{s.k}</h3>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 p-5">
+                <div className="text-xs uppercase tracking-widest text-muted-foreground">{t.scenarios.labels.before}</div>
+                <p className="mt-2 text-sm text-muted-foreground">{s.before}</p>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {s.deltas.map((d) => (
-                  <span key={d} className="rounded-full bg-brand px-3 py-1 text-xs text-primary-foreground shadow-glow">{d}</span>
-                ))}
+              <div className="rounded-2xl bg-brand/10 border border-white/10 p-5">
+                <div className="text-xs uppercase tracking-widest text-electric">{t.scenarios.labels.after}</div>
+                <p className="mt-2 text-sm">{s.after}</p>
               </div>
             </div>
-          </motion.article>
-        ))}
+            <div className="mt-6 flex flex-wrap gap-2">
+              {s.deltas.map((d) => (
+                <span key={d} className="rounded-full bg-brand px-3 py-1 text-xs text-primary-foreground shadow-glow">{d}</span>
+              ))}
+            </div>
+          </div>
+        </motion.article>
       </div>
+      <TeaserCTA to="/transformation-stories" label={t.common.exploreProgram} />
     </Section>
   );
 }
+
 
 /* ---------------- WHY SAUDI ---------------- */
 function WhySaudi() {
@@ -1020,20 +724,14 @@ function WhySaudi() {
 /* ---------------- INSIGHTS ---------------- */
 function Insights() {
   const t = useT();
-  const [cat, setCat] = useState(t.insights.categories[0]);
-  const items = cat === t.insights.categories[0] ? t.insights.articles : t.insights.articles.filter((a) => a.c === cat);
+  const items = t.insights.articles.slice(0, 3);
   return (
     <Section id="insights">
       <SectionHeading
         eyebrow={t.insights.eyebrow}
         title={<>{t.insights.title1} <span className="text-gradient italic">{t.insights.titleHi}</span>{t.insights.title2}</>}
       />
-      <div className="mt-10 flex flex-wrap gap-2">
-        {t.insights.categories.map((c) => (
-          <Chip key={c} active={cat === c} onClick={() => setCat(c)}>{c}</Chip>
-        ))}
-      </div>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((a, i) => (
           <motion.article
             key={a.t}
@@ -1054,9 +752,11 @@ function Insights() {
           </motion.article>
         ))}
       </div>
+      <TeaserCTA to="/insights" label={t.common.exploreProgram} />
     </Section>
   );
 }
+
 
 /* ---------------- FINAL CTA ---------------- */
 function FinalCTA() {
