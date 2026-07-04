@@ -724,20 +724,14 @@ function WhySaudi() {
 /* ---------------- INSIGHTS ---------------- */
 function Insights() {
   const t = useT();
-  const [cat, setCat] = useState(t.insights.categories[0]);
-  const items = cat === t.insights.categories[0] ? t.insights.articles : t.insights.articles.filter((a) => a.c === cat);
+  const items = t.insights.articles.slice(0, 3);
   return (
     <Section id="insights">
       <SectionHeading
         eyebrow={t.insights.eyebrow}
         title={<>{t.insights.title1} <span className="text-gradient italic">{t.insights.titleHi}</span>{t.insights.title2}</>}
       />
-      <div className="mt-10 flex flex-wrap gap-2">
-        {t.insights.categories.map((c) => (
-          <Chip key={c} active={cat === c} onClick={() => setCat(c)}>{c}</Chip>
-        ))}
-      </div>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((a, i) => (
           <motion.article
             key={a.t}
@@ -758,9 +752,11 @@ function Insights() {
           </motion.article>
         ))}
       </div>
+      <TeaserCTA to="/insights" label={t.common.exploreProgram} />
     </Section>
   );
 }
+
 
 /* ---------------- FINAL CTA ---------------- */
 function FinalCTA() {
