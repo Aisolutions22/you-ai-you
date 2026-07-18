@@ -5,7 +5,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "src/server.ts",
   "routes": [
-    { "pattern": "you-ai.sa", "custom_domain": true },
-    { "pattern": "www.you-ai.sa", "custom_domain": true }
+    { "pattern": "you-ai.io", "custom_domain": true },
+    { "pattern": "www.you-ai.io", "custom_domain": true }
   ]
 }
